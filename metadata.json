@@ -1,0 +1,6 @@
+{
+  "name": "Mom's Cloud Kitchen – Home-Style Food & Franchise",
+  "description": "Mom's Cloud Kitchen brings authentic home-style Indian meals crafted with a mother's warmth to homes across Vasai-Virar. Explore franchise opportunities today.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

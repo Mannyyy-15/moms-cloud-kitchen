@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      /* Ensure window.fetch has both a getter and setter so browser extensions and interceptors can wrap it without throwing TypeError */
+      (function() {
+        try {
+          var _origFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return _origFetch; },
+            set: function(fn) { _origFetch = fn; },
+            configurable: true,
+            enumerable: true
+          });
+          if (typeof Window !== 'undefined' && Window.prototype) {
+            try {
+              Object.defineProperty(Window.prototype, 'fetch', {
+                get: function() { return _origFetch; },
+                set: function(fn) { _origFetch = fn; },
+                configurable: true,
+                enumerable: true
+              });
+            } catch (_) {}
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <title>Mom's Cloud Kitchen – The Taste of Mom's Love | Cloud Kitchen Franchise in India</title>
+    <meta
+      name="description"
+      content="Mom's Cloud Kitchen serves authentic 100% pure-veg home-style South Indian food, high-protein ragi delicacies, and Shravan specials. Over 4,000+ orders served across Vasai-Virar. Enquire for low-capex dark kitchen franchise opportunities with 28–35% net margins on www.momscloudkitchen.com."
+    />
+    <meta name="keywords" content="Mom's Cloud Kitchen, momscloudkitchen.com, www.momscloudkitchen.com, cloud kitchen franchise in India, dark kitchen franchise Mumbai, pure veg cloud kitchen, food franchise opportunities under 5 lakhs, home-style food brand, South Indian food Vasai Virar, cloud kitchen business opportunity, Aditya Pushpa Kuttan, low investment food franchise, Swiggy Zomato cloud kitchen franchise" />
+    <meta name="author" content="Aditya Pushpa Kuttan - Mom's Cloud Kitchen" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://www.momscloudkitchen.com/" />
+    <meta name="theme-color" content="#174B35" />
+
+    <!-- Geo-Targeting Meta Tags -->
+    <meta name="geo.region" content="IN-MH" />
+    <meta name="geo.placename" content="Vasai, Virar, Mumbai, Maharashtra" />
+    <meta name="geo.position" content="19.3919;72.8397" />
+    <meta name="ICBM" content="19.3919, 72.8397" />
+    
+    <!-- Open Graph / Social Media Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mom's Cloud Kitchen" />
+    <meta property="og:url" content="https://www.momscloudkitchen.com/" />
+    <meta property="og:title" content="Mom's Cloud Kitchen – The Taste of Mom's Love | Franchise Opportunities" />
+    <meta property="og:description" content="Bringing maternal warmth, authentic South Indian flavours, and high-profit cloud kitchen franchise opportunities with proven 4,000+ orders. Explore unit economics on www.momscloudkitchen.com." />
+    <meta property="og:image" content="https://www.momscloudkitchen.com/images/hero_banner_custom.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mom's Cloud Kitchen traditional South Indian spread with masala dosa, idli, vada, and sambar on banana leaf" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@momscloudkitchen" />
+    <meta name="twitter:creator" content="@momscloudkitchen" />
+    <meta name="twitter:title" content="Mom's Cloud Kitchen – Pure Veg Dark Kitchen Franchise" />
+    <meta name="twitter:description" content="Own a high-margin pure-veg cloud kitchen with zero dining hall overheads. 4,000+ orders served. Enquire on WhatsApp at www.momscloudkitchen.com." />
+    <meta name="twitter:image" content="https://www.momscloudkitchen.com/images/hero_banner_custom.jpg" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/logo.webp" />
+    <link rel="apple-touch-icon" href="/logo.webp" />
+
+    <!-- Google Fonts: Anton (Heavy Display), Outfit (Display), Plus Jakarta Sans (Body), Fraunces (Editorial Accent) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured Data (JSON-LD) for Google Rich Snippets & Answer Engine Optimization (AEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.momscloudkitchen.com/#website",
+          "url": "https://www.momscloudkitchen.com",
+          "name": "Mom's Cloud Kitchen",
+          "publisher": {
+            "@id": "https://www.momscloudkitchen.com/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.momscloudkitchen.com/#organization",
+          "name": "Mom's Cloud Kitchen",
+          "url": "https://www.momscloudkitchen.com",
+          "logo": "https://www.momscloudkitchen.com/logo.webp",
+          "image": "https://www.momscloudkitchen.com/images/hero_banner_custom.jpg",
+          "founder": {
+            "@type": "Person",
+            "name": "Aditya Pushpa Kuttan",
+            "jobTitle": "Founder & Managing Director"
+          },
+          "foundingDate": "2024-02",
+          "description": "Authentic home-style cloud kitchen food brand bringing mom's love, pure vegetarian South Indian meals, and dark kitchen franchise partnerships to entrepreneurs across India.",
+          "telephone": "+919892447728",
+          "email": "adityakuttan@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Vasai & Virar",
+            "addressRegion": "Maharashtra",
+            "addressCountry": "IN"
+          },
+          "areaServed": ["Vasai", "Virar", "Palghar", "Mumbai", "Thane", "Navi Mumbai", "Pune", "Maharashtra", "India"],
+          "sameAs": [
+            "https://www.instagram.com/momscloudkitchen",
+            "https://wa.me/919892447728"
+          ]
+        },
+        {
+          "@type": "FoodEstablishment",
+          "@id": "https://www.momscloudkitchen.com/#establishment",
+          "name": "Mom's Cloud Kitchen",
+          "url": "https://www.momscloudkitchen.com",
+          "servesCuisine": ["South Indian", "Indian", "Home-style", "Pure Vegetarian", "Satvik Shravan Special", "Korean Ramen"],
+          "priceRange": "₹₹",
+          "telephone": "+919892447728",
+          "hasMenu": "https://www.momscloudkitchen.com/#food",
+          "paymentAccepted": "Cash, UPI, Credit Card, Online Payment",
+          "currenciesAccepted": "INR"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.momscloudkitchen.com/#faqpage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is the total investment required for a Mom's Cloud Kitchen franchise?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The Single Franchisee dark kitchen model starts with a one-time Franchise Fee of ₹3,99,000 (non-refundable). An all-inclusive setup with kitchen equipment, initial packaging, and POS drills comes to approximately ₹6,49,000. Master Franchise rights for an entire territory or city start at ₹12,50,000."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need a commercial showroom or high-rent dining space?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Mom's Cloud Kitchen operates strictly on a delivery-first cloud kitchen model. You only need a 150 to 250 sq. ft. kitchen space in a low-rent area with water and electricity, minimizing monthly fixed overhead."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do I need to hire a Master Chef?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All core spice premixes, gravies, and batter formulations are provided centrally by Mom's Cloud Kitchen. Any kitchen associate can execute the full menu with 100% taste consistency after our 7-day initial training."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What are the monthly royalty terms?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We charge a transparent, low 5% monthly royalty on net kitchen sales reported via cloud POS. There are zero surprise renewal fees."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Who is the founder of Mom's Cloud Kitchen?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Mom's Cloud Kitchen was founded by Aditya Pushpa Kuttan in February 2024 in Vasai-Virar, Maharashtra, serving over 4,000+ orders across Swiggy, Zomato, and Magicpin."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="bg-[#FFF8EC] text-[#28231E] font-sans antialiased selection:bg-[#E87924] selection:text-white min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
