@@ -1,31 +1,103 @@
+# ----------------------------------------------------------------------
+# 1. MIME TYPES DEFINITIONS (Essential for Hostinger LiteSpeed / Apache)
+# ----------------------------------------------------------------------
+<IfModule mod_mime.c>
+  # JavaScript Modules & Scripts
+  AddType application/javascript js mjs
+  AddType text/javascript js mjs
+
+  # Stylesheets
+  AddType text/css css
+
+  # WebP and Modern Images
+  AddType image/webp webp
+  AddType image/svg+xml svg svgz
+  AddType image/jpeg jpeg jpg
+  AddType image/png png
+  AddType image/x-icon ico
+  AddType image/gif gif
+
+  # Fonts
+  AddType font/woff2 woff2
+  AddType font/woff woff
+  AddType font/ttf ttf
+  AddType font/otf otf
+
+  # Data
+  AddType application/json json
+  AddType application/xml xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 2. SINGLE PAGE APPLICATION (SPA) REWRITE RULES
+# ----------------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 1. If the requested file or directory exists physically, serve it directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2. Never rewrite missing static assets to index.html!
+  # If a script, style, image or font is missing, return a true 404.
+  # Serving index.html for a missing .js file causes browsers to throw:
+  # "Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of text/plain"
+  RewriteCond %{REQUEST_URI} \.(js|mjs|css|webp|png|jpe?g|gif|svgz?|ico|json|woff2?|ttf|otf|eot)$ [NC]
+  RewriteRule ^ - [L,R=404]
+
+  # 3. For all other virtual SPA routes, route to index.html
   RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
 
-# Caching and Compression
+# ----------------------------------------------------------------------
+# 3. COMPRESSION (mod_deflate)
+# ----------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json image/svg+xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# 4. BROWSER CACHING (mod_expires)
+# ----------------------------------------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresDefault "access plus 1 month"
+
+  # HTML: Never cache index.html so updates to script hashes load immediately
+  ExpiresByType text/html "access plus 0 seconds"
+
+  # CSS & JS: Cache heavily since Vite uses content hashes
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+
+  # Images & Fonts
   ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
-</IfModule>
-
-# Security Headers
+# ----------------------------------------------------------------------
+# 5. SECURITY & HEADERS
+# ----------------------------------------------------------------------
 <IfModule mod_headers.c>
+  # Enforce nosniff (now safe because MIME types are explicitly declared above)
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
+  Header set Access-Control-Allow-Origin "*"
 
+  # Prevent aggressive caching of index.html
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+</IfModule>

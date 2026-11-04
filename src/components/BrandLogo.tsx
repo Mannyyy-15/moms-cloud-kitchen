@@ -39,9 +39,14 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           alt="Mom's Cloud Kitchen Logo"
           className="w-full h-full object-cover"
           onError={(e) => {
-            // Fallback if logo.webp isn't loaded
-            const target = e.target as HTMLElement;
-            target.style.display = 'none';
+            const target = e.currentTarget;
+            if (target.src.endsWith('/logo.webp')) {
+              target.src = '/images/logo.webp';
+            } else if (target.src.endsWith('/images/logo.webp')) {
+              target.src = '/images/mom_0.webp';
+            } else {
+              target.style.display = 'none';
+            }
           }}
         />
       </div>
