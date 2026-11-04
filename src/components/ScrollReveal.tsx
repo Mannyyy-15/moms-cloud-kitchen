@@ -23,7 +23,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   yOffset = 24,
   xOffset = 0,
   direction = 'up',
-  viewportMargin = '-60px',
+  viewportMargin = '-40px',
   once = true,
 }) => {
   const shouldReduceMotion = useReducedMotion();
@@ -79,7 +79,7 @@ export const StaggerContainer: React.FC<{
   children,
   className = '',
   staggerDelay = 0.1,
-  viewportMargin = '-60px',
+  viewportMargin = '-40px',
   once = true,
 }) => {
   const shouldReduceMotion = useReducedMotion();
@@ -142,7 +142,8 @@ export const StaggerItem: React.FC<{
 };
 
 /**
- * TextReveal component: Animates text word-by-word sliding up through an overflow mask
+ * High-Impact Cinematic TextReveal Component
+ * Splits text into words with upward slide + blur fade-in for clear visual reveal.
  */
 export const TextReveal: React.FC<{
   text: string;
@@ -154,7 +155,7 @@ export const TextReveal: React.FC<{
   text,
   className = '',
   as: Component = 'h2',
-  delay = 0,
+  delay = 0.05,
   wordClassName = '',
 }) => {
   const shouldReduceMotion = useReducedMotion();
@@ -165,17 +166,17 @@ export const TextReveal: React.FC<{
   }
 
   return (
-    <Component className={`flex flex-wrap ${className}`}>
+    <Component className={`flex flex-wrap items-center ${className}`}>
       {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden mr-[0.25em] last:mr-0">
+        <span key={i} className="inline-block overflow-hidden mr-[0.25em] last:mr-0 py-0.5">
           <motion.span
-            initial={{ y: '110%', opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 35, filter: 'blur(5px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: '-20px' }}
             transition={{
-              duration: 0.6,
-              delay: delay + i * 0.035,
-              ease: [0.16, 1, 0.3, 1],
+              duration: 0.65,
+              delay: delay + i * 0.055,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className={`inline-block ${wordClassName}`}
           >

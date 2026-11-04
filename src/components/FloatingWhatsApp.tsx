@@ -58,3 +58,4 @@ export const FloatingWhatsApp: React.FC = () => {
     </div>
   );
 };
+

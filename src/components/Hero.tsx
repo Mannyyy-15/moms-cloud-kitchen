@@ -16,7 +16,7 @@ export const Hero: React.FC = () => {
       id="hero"
       className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#1E0F08] select-none"
     >
-      {/* 1. Full-bleed Background: South Indian Culinary Spread */}
+      {/* 1. Full-bleed Background: Traditional South Indian Feast Spread */}
       <div className="absolute inset-0 z-0">
         <img
           src={BRAND_INFO.images.hero}
@@ -26,22 +26,22 @@ export const Hero: React.FC = () => {
           fetchPriority="high"
         />
 
-        {/* Minimal Subtle Scrims to preserve the vibrant food photography while ensuring crisp contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/65 pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none" />
+        {/* Minimal subtle scrims to preserve vibrant food photography while ensuring contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/60 pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/90 via-black/45 to-transparent pointer-events-none" />
       </div>
 
       {/* Top spacer for the floating navigation bar */}
-      <div className="pt-28 sm:pt-32" />
+      <div className="pt-24 sm:pt-32" />
 
-      {/* 2. Bottom Content Container: Centered Action Buttons + Centered MOM'S KITCHEN Headline */}
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pb-4 sm:pb-8 flex flex-col items-center justify-end text-center mt-auto">
+      {/* 2. Bottom Content Container: Centered Action Buttons + 100vw Full-Width MOM'S KITCHEN Headline */}
+      <div className="relative z-10 w-full flex flex-col items-center justify-end text-center mt-auto pb-2 sm:pb-4 px-2 sm:px-4">
         {/* Centered Action Buttons directly above the headline */}
         <motion.div
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6"
+          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-5"
         >
           {/* Primary Action Button */}
           <button
@@ -55,28 +55,38 @@ export const Hero: React.FC = () => {
           {/* Secondary Action Button */}
           <button
             onClick={() => scrollTo('#story')}
-            className="inline-flex items-center gap-2 bg-black/35 hover:bg-black/55 text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl border border-white/50 hover:border-white transition-all duration-200 backdrop-blur-xs cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="inline-flex items-center gap-2 bg-black/40 hover:bg-black/60 text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl border border-white/50 hover:border-white transition-all duration-200 backdrop-blur-xs cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <span>Discover Our Story</span>
             <ArrowUpRight className="w-4 h-4 text-white/90" />
           </button>
         </motion.div>
 
-        {/* 3. Giant Typography Statement: Centered at the bottom */}
+        {/* 3. Massive Headline: Fits 100% of viewport width across all devices perfectly */}
         <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full overflow-hidden leading-none text-center flex justify-center items-center"
+          transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-[100vw] overflow-hidden leading-none text-center flex justify-center items-center"
         >
-          <h1
-            className="font-heavy text-white uppercase text-[12vw] sm:text-[13vw] md:text-[14vw] lg:text-[14.8vw] leading-[0.82] tracking-tight text-center drop-shadow-[0_10px_25px_rgba(0,0,0,0.65)] select-none whitespace-nowrap mx-auto"
-            style={{
-              fontFamily: 'Anton, Outfit, Impact, sans-serif',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            MOM'S KITCHEN
+          <h1 className="w-full max-w-[100vw] select-none block" aria-label="Mom's Kitchen">
+            <svg
+              viewBox="0 0 1000 120"
+              className="w-full h-auto block max-h-[17vh] drop-shadow-[0_12px_28px_rgba(0,0,0,0.7)] pointer-events-none"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <text
+                x="500"
+                y="102"
+                textAnchor="middle"
+                fill="#FFFFFF"
+                fontWeight="900"
+                fontFamily="Anton, Outfit, Impact, sans-serif"
+                letterSpacing="-0.02em"
+              >
+                MOM'S KITCHEN
+              </text>
+            </svg>
           </h1>
         </motion.div>
       </div>
