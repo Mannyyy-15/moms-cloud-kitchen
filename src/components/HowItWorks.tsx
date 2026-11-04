@@ -3,7 +3,7 @@ import { Send, PhoneCall, FileCheck, Rocket, ArrowRight } from 'lucide-react';
 import { ScrollReveal, StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal';
 import { StepItem } from '../types';
 
-export const STEPS_DATA: StepItem[] = [
+const STEPS_DATA: StepItem[] = [
   {
     number: "01",
     title: "Submit Your Enquiry",
@@ -135,3 +135,4 @@ export const HowItWorks: React.FC = () => {
     </section>
   );
 };
+

@@ -115,3 +115,4 @@ export function trackFranchiseLead(details?: { model?: string; city?: string }):
     });
   }
 }
+
