@@ -30,7 +30,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {/* Official Brand Logo Emblem */}
       <div
         className={`${iconSizes[size]} rounded-full overflow-hidden flex items-center justify-center shrink-0 transition-transform duration-300 hover:scale-105 shadow-sm border-2 ${
-          isLight ? 'border-white/30 bg-white' : 'border-[#174B35]/30 bg-white'
+          isLight ? 'border-white/40 bg-white ring-2 ring-white/20' : 'border-[#E87924]/40 bg-white ring-2 ring-[#E87924]/10'
         }`}
         aria-hidden="true"
       >
@@ -55,17 +55,17 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       <div className="flex flex-col leading-tight">
         <span
           className={`font-display font-extrabold tracking-tight ${textSizes[size]} ${
-            isLight ? 'text-white' : 'text-[#174B35]'
+            isLight ? 'text-white' : 'text-[#28231E]'
           }`}
         >
           Mom's <span className="text-[#E87924]">Cloud Kitchen</span>
         </span>
         <span
-          className={`text-[10px] uppercase font-bold tracking-[0.2em] -mt-0.5 ${
-            isLight ? 'text-[#FFF8EC]/70' : 'text-[#28231E]/60'
+          className={`text-[10px] uppercase font-bold tracking-[0.16em] -mt-0.5 ${
+            isLight ? 'text-white/80' : 'text-[#8C4A0E]'
           }`}
         >
-          Pure Veg · Vasai & Virar
+          Made By Mom Loved By All
         </span>
       </div>
     </div>
