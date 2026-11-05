@@ -193,7 +193,7 @@ export const BrandStory: React.FC = () => {
               <div className="mt-4 p-5 sm:p-6 bg-[#FFF3E3] rounded-2xl border-2 border-[#E87924]/30 shadow-sm relative">
                 <Quote className="w-8 h-8 text-[#E87924]/20 absolute top-4 right-4 pointer-events-none" />
                 <p className="font-serif-editorial italic text-sm sm:text-base text-[#28231E] leading-relaxed mb-3">
-                  &ldquo;I started my career cleaning floors in a coffee shop. Today, I dream of building a food brand that reaches thousands of homes. The journey is proof that your background doesn&apos;t decide your future — your determination does.&rdquo;
+                  &ldquo;I started my career cleaning floors in a coffee shop. Yesterday I dreamed of building a food brand that reaches thousands of homes. The journey is proof that your background doesn&apos;t decide your future — your determination does.&rdquo;
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[#E87924]" />

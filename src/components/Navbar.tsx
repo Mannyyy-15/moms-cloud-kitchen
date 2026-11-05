@@ -53,15 +53,32 @@ export const Navbar: React.FC<NavbarProps> = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sm:gap-8">
-        {/* Zone 1: Brand Wordmark */}
-        <a
-          href="#hero"
-          onClick={(e) => handleLinkClick(e, '#hero')}
-          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E87924] rounded-lg shrink-0 select-none"
-          aria-label="Mom's Cloud Kitchen Home"
-        >
-          <BrandLogo variant={isScrolled ? 'dark' : 'light'} size="md" />
-        </a>
+        {/* Zone 1: Brand Wordmark & 100% Pure Veg Tag */}
+        <div className="flex items-center gap-3">
+          <a
+            href="#hero"
+            onClick={(e) => handleLinkClick(e, '#hero')}
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E87924] rounded-lg shrink-0 select-none"
+            aria-label="Mom's Cloud Kitchen Home"
+          >
+            <BrandLogo variant={isScrolled ? 'dark' : 'light'} size="md" />
+          </a>
+
+          {/* 100% Pure Veg Tag */}
+          <div
+            className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black tracking-wider uppercase border transition-colors ${
+              isScrolled
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-600/30'
+                : 'bg-emerald-950/70 text-emerald-300 border-emerald-500/50 backdrop-blur-md shadow-sm'
+            }`}
+            title="100% Pure Vegetarian Kitchen"
+          >
+            <span className="w-3.5 h-3.5 border-2 border-emerald-500 p-[2px] flex items-center justify-center rounded-sm shrink-0">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+            </span>
+            <span>100% Pure Veg</span>
+          </div>
+        </div>
 
         {/* Zone 2: Navigation Links (Desktop) */}
         <nav

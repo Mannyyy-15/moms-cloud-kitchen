@@ -46,30 +46,40 @@ export const Hero: React.FC = () => {
 
       {/* 2. Bottom Content Container: Centered Action Buttons + 100vw Full-Width MOM'S KITCHEN Text */}
       <div className="relative z-10 w-full flex flex-col items-center justify-end text-center mt-auto pb-0 px-0">
-        {/* Centered Action Buttons directly above the text */}
+        {/* Centered Action Buttons & 100% Pure Veg Trust Tag directly above text */}
         <motion.div
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-5 px-4"
+          className="flex flex-col items-center gap-3 sm:gap-4 mb-3 sm:mb-5 px-4"
         >
-          {/* Primary Action Button */}
-          <button
-            onClick={() => scrollTo('#franchise-enquiry')}
-            className="inline-flex items-center gap-2 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl shadow-2xl hover:shadow-[#E87924]/40 transition-all duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          >
-            <span>Explore Franchise</span>
-            <ArrowUpRight className="w-4 h-4 text-white" />
-          </button>
+          {/* 100% Pure Vegetarian Trust Pill */}
+          <div className="inline-flex items-center gap-2 bg-black/65 border border-emerald-500/70 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black text-emerald-300 uppercase tracking-widest shadow-xl">
+            <span className="w-3.5 h-3.5 border-2 border-emerald-400 p-[2px] flex items-center justify-center rounded-sm shrink-0">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+            </span>
+            <span>100% Pure Vegetarian Kitchen</span>
+          </div>
 
-          {/* Secondary Action Button */}
-          <button
-            onClick={() => scrollTo('#story')}
-            className="inline-flex items-center gap-2 bg-black/40 hover:bg-black/60 active:scale-[0.98] text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl border border-white/50 hover:border-white transition-all duration-200 backdrop-blur-md cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          >
-            <span>Discover Our Story</span>
-            <ArrowUpRight className="w-4 h-4 text-white/90" />
-          </button>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            {/* Primary Action Button */}
+            <button
+              onClick={() => scrollTo('#franchise-enquiry')}
+              className="inline-flex items-center gap-2 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl shadow-2xl hover:shadow-[#E87924]/40 transition-all duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <span>Explore Franchise</span>
+              <ArrowUpRight className="w-4 h-4 text-white" />
+            </button>
+
+            {/* Secondary Action Button */}
+            <button
+              onClick={() => scrollTo('#story')}
+              className="inline-flex items-center gap-2 bg-black/40 hover:bg-black/60 active:scale-[0.98] text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl border border-white/50 hover:border-white transition-all duration-200 backdrop-blur-md cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <span>Discover Our Story</span>
+              <ArrowUpRight className="w-4 h-4 text-white/90" />
+            </button>
+          </div>
         </motion.div>
 
         {/* 3. Massive Headline: Sized to fit 100% of viewport width (100vw) across all devices perfectly */}

@@ -20,7 +20,7 @@ export const BRAND_INFO = {
   instagramHandle: "@moms.cloud.kitchen.mumbai",
   orderCount: "4,000+",
   platforms: ["Swiggy", "Zomato", "Magicpin"],
-  founderQuote: "I started my career cleaning floors in a coffee shop. Today, I dream of building a food brand that reaches thousands of homes. The journey is proof that your background doesn't decide your future — your determination does.",
+  founderQuote: "I started my career cleaning floors in a coffee shop. Yesterday I dreamed of building a food brand that reaches thousands of homes. The journey is proof that your background doesn't decide your future — your determination does.",
   images: {
     hero: "/images/hero_banner_custom.jpg",
     founder: "/images/founder_aditya_kuttan_hd.jpg",
