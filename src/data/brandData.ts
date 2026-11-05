@@ -1,25 +1,30 @@
-import { MenuCategory, StatItem, BrandValue } from '../types';
+import { MenuCategory, StatItem, BrandValue, WomenEmpowermentStory } from '../types';
 
 export const BRAND_INFO = {
   name: "Mom's Cloud Kitchen",
-  tagline: "The Taste of Mom's Love",
+  tagline: "Made By Mom Loved By All",
   kicker: "MORE THAN FOOD. IT'S A FEELING.",
-  founder: "Aditya Pushpa Kuttan",
+  founder: "Aditya Kuttan",
   founderRole: "Founder | Mom's Cloud Kitchen",
   foundedDate: "February 2024",
   foundedLocation: "Vasai & Virar",
-  phone: "+91 98924 47728",
-  phoneClean: "+919892447728",
-  whatsappUrl: "https://wa.me/919892447728",
-  email: "adityakuttan@gmail.com",
-  formEndpoint: "https://formsubmit.co/ajax/adityakuttan@gmail.com",
+  phone: "8484030988",
+  phoneDisplay: "+91 84840 30988",
+  phoneClean: "+918484030988",
+  whatsappUrl: "https://wa.me/918484030988?text=Hi%20Aditya!%20I%20am%20interested%20in%20the%20Mom's%20Cloud%20Kitchen%20Franchise%20Opportunity.",
+  email: "aditya@momscloudkitchen.com",
+  formEndpoint: "https://formsubmit.co/ajax/aditya@momscloudkitchen.com",
   domain: "www.momscloudkitchen.com",
   websiteUrl: "https://www.momscloudkitchen.com",
+  instagram: "https://www.instagram.com/moms.cloud.kitchen.mumbai",
+  instagramHandle: "@moms.cloud.kitchen.mumbai",
   orderCount: "4,000+",
   platforms: ["Swiggy", "Zomato", "Magicpin"],
+  founderQuote: "I started my career cleaning floors in a coffee shop. Today, I dream of building a food brand that reaches thousands of homes. The journey is proof that your background doesn't decide your future — your determination does.",
   images: {
     hero: "/images/hero_banner_custom.jpg",
-    founder: "/images/founder_aditya_pushpa_kuttan_2.webp",
+    founder: "/images/founder_aditya_kuttan_hd.jpg",
+    founderBackup: "/images/founder_aditya_pushpa_kuttan_2.webp",
     momCooking: "/images/kitchen_mom_cooking_1793814074228.jpg",
     southIndian: "/images/food_south_indian_thali_1793814074632.jpg",
     breakfast: "/images/dish_masala_dosa.jpeg",
@@ -39,17 +44,17 @@ export const STATS_DATA: StatItem[] = [
   {
     value: "Feb 2024",
     label: "Founded",
-    detail: "From Mom's home kitchen to a trusted dark kitchen brand"
+    detail: "From Mom's home kitchen to a trusted mom's cloud kitchen brand"
   },
   {
     value: "28–35%",
     label: "Net Profit Margin",
-    detail: "Robust delivery-first unit economics with low 5% royalty"
+    detail: "Robust delivery & dine-in unit economics with flat 5% royalty"
   },
   {
-    value: "4–6 Mos",
-    label: "Payback Period",
-    detail: "Rapid capital recovery driven by lean 150–250 sq.ft footprint"
+    value: "6–8 Mos",
+    label: "ROI Timeline",
+    detail: "Rapid ROI in 6 to 8 months driven by lean capex and high repeat orders"
   }
 ];
 
@@ -75,6 +80,53 @@ export const BRAND_VALUES: BrandValue[] = [
     iconName: "Flame"
   }
 ];
+
+export const WOMEN_EMPOWERMENT_DATA: WomenEmpowermentStory = {
+  title: "EMPOWERING WOMEN, TRANSFORMING LIVES",
+  quote: "Some people cook to earn a living. We want to give them a platform where cooking becomes their strength, their identity and their path to independence.",
+  vision: "Our vision is not just to build a successful food brand, but to build a community where women get the opportunity to transform their lives through employment, skills and financial independence.",
+  mission: "We cook with love, we grow together — empowering women, one opportunity at a time.",
+  images: [
+    {
+      src: "/images/women_empowerment_cooking_1.jpg",
+      caption: "Culinary Mastery with Maternal Care",
+      alt: "Indian woman chef cooking authentic dosas with motherly affection"
+    },
+    {
+      src: "/images/kitchen_mom_cooking_1793814074228.jpg",
+      caption: "Home-Style Recipes & Authentic Tempering",
+      alt: "Mother cooking fresh vegetarian dishes with traditional recipes"
+    },
+    {
+      src: "/images/women_empowerment_packaging_2.jpg",
+      caption: "Hygienic Cloud Kitchen Operations",
+      alt: "Women team packaging clean sealed meal boxes in cloud kitchen"
+    },
+    {
+      src: "/images/women_empowerment_pride_3.jpg",
+      caption: "Dignity, Independence & Pride",
+      alt: "Proud woman food entrepreneur holding fresh traditional meal"
+    }
+  ],
+  pillars: [
+    {
+      title: "Financial Independence",
+      description: "Providing sustainable, dignified livelihoods and equal earning opportunities so women can support their families with pride."
+    },
+    {
+      title: "Skill Development & Training",
+      description: "Structured commercial kitchen training, food safety SOPs, cloud POS mastery, and leadership coaching for culinary staff."
+    },
+    {
+      title: "Motherly Love in Every Meal",
+      description: "Infusing every dish with the authentic affection, care, and cleanliness only a mother's touch can deliver."
+    },
+    {
+      title: "Supportive & Safe Workspaces",
+      description: "Creating a positive, hygienic, and respectful kitchen culture where every woman is valued, heard, and empowered."
+    }
+  ]
+};
 
 export const MENU_CATEGORIES: MenuCategory[] = [
   {
@@ -107,34 +159,34 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         description: "Thick spongy pancake topped with caramelized country onions, ripe tomatoes and aromatic curry leaves.",
         price: "₹189",
         image: "/images/dish_uttappam.jpeg",
-        tag: "Wholesome"
+        tag: "Comfort"
       },
       {
         id: "b4",
-        name: "Idli (4 Pcs)",
+        name: "Idli (4 pcs)",
         category: "All Day Breakfast",
         description: "Melt-in-mouth ultra-soft steamed rice and urad lentil cakes accompanied by aromatic homestyle drumstick sambar.",
         price: "₹129",
         image: "/images/dish_idli_4_pcs.jpeg",
-        tag: "Mom's Special"
+        tag: "Healthy"
       },
       {
         id: "b5",
-        name: "Stuffed Idli (4 Pcs)",
+        name: "Medu Vada (4 pcs)",
         category: "All Day Breakfast",
-        description: "Puffy steamed idlis stuffed with seasoned potato and spiced lentil fillings, served with signature chutneys.",
+        description: "Golden crisp on the outside, fluffy cloud-soft inside. Spiced with crushed peppercorns and whole cumin.",
         price: "₹149",
-        image: "/images/dish_stuffed_idli_4_pcs.jpeg",
-        tag: "Special"
+        image: "/images/dish_medu_vada_4_pcs.jpeg",
+        tag: "Crispy"
       },
       {
         id: "b6",
-        name: "Medu Vada (4 Pcs)",
+        name: "Stuffed Idli (4 pcs)",
         category: "All Day Breakfast",
-        description: "Crunchy golden crust on the exterior, tender and fluffy inside, tempered with black pepper and fresh curry leaves.",
+        description: "Fluffy steamed idlis stuffed with a flavorful spiced vegetable medley, served with chutney trio.",
         price: "₹149",
-        image: "/images/dish_medu_vada_4_pcs.jpeg",
-        tag: "Popular"
+        image: "/images/dish_stuffed_idli_4_pcs.jpeg",
+        tag: "Chef Special"
       },
       {
         id: "b7",
@@ -143,13 +195,13 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         description: "Flattened rice tossed with roasted peanuts, mustard seeds, turmeric, green chillies, and freshly squeezed lemon.",
         price: "₹149",
         image: "/images/dish_poha.jpeg",
-        tag: "Comfort Food"
+        tag: "Light"
       },
       {
         id: "b8",
         name: "Upma",
         category: "All Day Breakfast",
-        description: "Traditional roasted semolina cooked gently with ginger, mustard seeds, curry leaves, and a touch of pure ghee.",
+        description: "Slow-roasted semolina tempered with mustard seeds, crunchy urad dal, ginger, and curry leaves in pure desi ghee.",
         price: "₹149",
         image: "/images/dish_upma.jpeg",
         tag: "Homestyle"
@@ -158,170 +210,170 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         id: "b9",
         name: "Masala Appe",
         category: "All Day Breakfast",
-        description: "Crispy golden bite-sized dumplings made from tempered batter, soft within and packed with mild spices.",
+        description: "Crispy-shelled steamed dumplings made from fermented batter, tempered with onions, mustard, and green chillies.",
         price: "₹189",
         image: "/images/dish_masala_appe.jpeg",
-        tag: "Must Try"
+        tag: "Popular"
       }
     ]
   },
   {
-    id: "healthy-protein",
-    title: "Healthy Bites (Full of Protein)",
-    subtitle: "Nutrient-dense finger millet (Ragi) preparations rich in calcium, iron, and dietary fibre.",
+    id: "protein-ragi",
+    title: "High Protein & Ragi Healthy Delights",
+    subtitle: "Nutrient-packed finger-millet (ragi) dishes rich in calcium, natural fiber and plant protein.",
     items: [
       {
-        id: "h1",
-        name: "Ragi Idli (4 Pcs)",
-        category: "Healthy Bites",
-        description: "Steamed fluffy finger millet idlis offering high protein and sustained energy without compromising softness.",
+        id: "p1",
+        name: "Ragi Plain Dosa",
+        category: "High Protein Ragi",
+        description: "Nutritious stone-ground finger millet crepe cooked crisp on cast iron, paired with homemade low-oil coconut chutney.",
         price: "₹149",
-        image: "/images/dish_ragi_idli_4_pcs.jpeg",
-        tag: "High Protein"
+        image: "/images/dish_ragi_plain_dosa.jpeg",
+        tag: "Millet Power"
       },
       {
-        id: "h2",
-        name: "Ragi Stuffed Idli (4 Pcs)",
-        category: "Healthy Bites",
-        description: "Hearty ragi cakes filled with a lightly spiced vegetable core, served with antioxidant-rich tomato and coconut chutneys.",
+        id: "p2",
+        name: "Ragi Masala Dosa",
+        category: "High Protein Ragi",
+        description: "Fiber-rich crispy ragi crepe folded over delicate homestyle potato stuffing seasoned with turmeric and mustard.",
         price: "₹189",
-        image: "/images/dish_ragi_stuffed_idli_4_pcs.jpeg",
+        image: "/images/dish_ragi_masala_dosa.jpeg",
+        tag: "Top Seller"
+      },
+      {
+        id: "p3",
+        name: "Ragi Uttappam",
+        category: "High Protein Ragi",
+        description: "Wholesome gluten-conscious ragi pancake garnished generously with chopped onions, sweet carrots and coriander.",
+        price: "₹189",
+        image: "/images/dish_ragi_uttappam.jpeg",
+        tag: "Slow Carb"
+      },
+      {
+        id: "p4",
+        name: "Ragi Idli (4 pcs)",
+        category: "High Protein Ragi",
+        description: "Mineral-rich steamed ragi cakes providing long-lasting energy, served with traditional drumstick sambar.",
+        price: "₹119",
+        image: "/images/dish_ragi_idli_4_pcs.jpeg",
         tag: "Superfood"
       },
       {
-        id: "h3",
-        name: "Ragi Plain Dosa",
-        category: "Healthy Bites",
-        description: "Wholesome gluten-conscious thin crepe crafted from whole ragi grain and lentils, roasted to delicate crispness.",
-        price: "₹119",
-        image: "/images/dish_ragi_plain_dosa.jpeg",
-        tag: "Fitness Favorite"
-      },
-      {
-        id: "h4",
-        name: "Ragi Masala Dosa",
-        category: "Healthy Bites",
-        description: "Crisp ragi crepe filled with nutrient-balanced spiced potato and herb filling. High nutrition, authentic taste.",
-        price: "₹179",
-        image: "/images/dish_ragi_masala_dosa.jpeg",
-        tag: "Top Rated"
-      },
-      {
-        id: "h5",
-        name: "Ragi Uttappam",
-        category: "Healthy Bites",
-        description: "Thick savory ragi pancake enriched with farm vegetables, ginger, and curry leaves for a wholesome meal.",
+        id: "p5",
+        name: "Ragi Stuffed Idli (4 pcs)",
+        category: "High Protein Ragi",
+        description: "Hearty ragi cakes filled with a lightly spiced vegetable core, served with antioxidant-rich tomato and coconut chutneys.",
         price: "₹189",
-        image: "/images/dish_ragi_uttappam.jpeg",
-        tag: "Nutrient Rich"
+        image: "/images/dish_ragi_stuffed_idli_4_pcs.jpeg",
+        tag: "Wholesome"
       },
       {
-        id: "h6",
-        name: "Ragi Masala Appa (12 Pcs)",
-        category: "Healthy Bites",
-        description: "Dozen golden-crusted ragi appe balls tossed with mustard, curry leaves, and green chillies. Ideal guilt-free snacking.",
-        price: "₹229",
+        id: "p6",
+        name: "Ragi Masala Appa (12 pcs)",
+        category: "High Protein Ragi",
+        description: "Twelve golden-brown bite-sized ragi dumplings, crunchy outside and tender within, tossed in delicate Indian spices.",
+        price: "₹179",
         image: "/images/dish_ragi_masala_appa_12_pcs.jpeg",
-        tag: "Family Pack"
+        tag: "Snack Favorite"
       }
     ]
   },
   {
-    id: "shravan-special",
-    title: "Shravan & Snacks Special",
-    subtitle: "Fast-friendly Vrat / Upwas delicacies and crispy tea-time favorites.",
+    id: "shravan-specials",
+    title: "Shravan, Upvas & Fasting Delicacies",
+    subtitle: "Prepared in designated satvik vessels with sendha namak (rock salt) for pious fasting days.",
     items: [
       {
         id: "s1",
         name: "Sabudana Khichdi",
-        category: "Shravan Special",
-        description: "Non-sticky, soft sago pearls tossed with crushed roasted peanuts, cumin, green chillies, and sendha namak.",
-        price: "₹199",
+        category: "Shravan & Upvas",
+        description: "Non-sticky translucent tapioca pearls tossed with coarse roasted crushed peanuts, cumin, green chillies and rock salt.",
+        price: "₹189",
         image: "/images/dish_sabudana_khichdi.jpeg",
-        tag: "Upwas Special"
+        tag: "100% Satvik"
       },
       {
         id: "s2",
-        name: "Crispy Golden French Fries",
-        category: "Snacks",
-        description: "Crisp straight-cut potato fries lightly salted, fried in clean groundnut oil to a golden crunch.",
-        price: "₹199",
+        name: "French Fries",
+        category: "Shravan & Upvas",
+        description: "Crisp hand-cut potato batons fried in clean vegetable oil and tossed in sendha rock salt.",
+        price: "₹149",
         image: "/images/dish_french_fries.jpeg",
-        tag: "Kids Favorite"
+        tag: "Kid's Pick"
       }
     ]
   },
   {
     id: "korean-ramen",
-    title: "Korean Ramen Special",
-    subtitle: "Slurpy comforting hot broth bowls infused with rich aromatics and fresh noodles.",
+    title: "Korean Ramen Special (100% Pure Veg)",
+    subtitle: "Piping hot fusion noodles in spicy aromatic broths with fresh herbs, tofu, and Asian greens. Zero egg, zero non-veg.",
     items: [
       {
         id: "k1",
-        name: "Korean Kimchi Ramen",
+        name: "Korean Kimchi Ramen (Pure Veg)",
         category: "Korean Ramen",
-        description: "Tangy and savory broth with fermented kimchi punch, scallions, spring onions, and chewy ramen noodles.",
+        description: "100% Pure Vegetarian broth with tangy fermented kimchi, tender tofu cubes, scallions, bok choy, and chewy ramen noodles. Pure Veg.",
         price: "₹299",
-        image: "/images/dish_korean_kimchi_ramen.jpeg",
-        tag: "Chef Special"
+        image: "/images/dish_korean_kimchi_ramen_pureveg.jpg",
+        tag: "100% Pure Veg"
       },
       {
         id: "k2",
         name: "Korean Hot & Spicy Ramen",
         category: "Korean Ramen",
-        description: "Fiery aromatic chili broth loaded with vegetables, garlic chili oil, and satisfying noodles for spice lovers.",
+        description: "Fiery Korean chili paste broth loaded with sweet corn, spring onions, mushrooms, and springy ramen noodles.",
         price: "₹299",
         image: "/images/dish_korean_hot___spicy_ramen.jpeg",
-        tag: "Extra Spicy"
+        tag: "Spicy"
       },
       {
         id: "k3",
         name: "Korean Curry Ramen",
         category: "Korean Ramen",
-        description: "Warm mildly spiced creamy golden curry broth enveloping tender noodles and freshly diced vegetables.",
+        description: "Rich, mildly spiced velvety curry noodle soup topped with fresh garden greens and sesame seeds.",
         price: "₹299",
         image: "/images/dish_korean_curry_ramen.jpeg",
-        tag: "Comforting"
+        tag: "Fusion"
       }
     ]
   },
   {
-    id: "sweet-desserts",
-    title: "Sweet Dish & Desserts",
-    subtitle: "Unique dessert innovations loved by kids and adults alike.",
+    id: "sweet-tooth",
+    title: "Sweet Tooth & Dessert Treats",
+    subtitle: "Handcrafted sweet indulgences crafted with rich cocoa, creamy spreads, and warm maternal affection.",
     items: [
       {
-        id: "sw1",
+        id: "d1",
         name: "Chocolate Dosa",
-        category: "Sweet Dish",
-        description: "Crispy thin dosa drizzled generously with premium melted chocolate sauce and cocoa sprinkles.",
+        category: "Sweet Tooth",
+        description: "Paper-thin hot crisp crepe generously slathered with molten hazelnut chocolate ganache and chocolate sprinkles.",
         price: "₹199",
         image: "/images/dish_chocolate_dosa.jpeg",
+        tag: "Sweet Delight"
+      },
+      {
+        id: "d2",
+        name: "Chocolate Idli (4 pcs)",
+        category: "Sweet Tooth",
+        description: "Warm, fluffy cocoa-infused steamed idli pillows drizzled with decadent dark chocolate syrup.",
+        price: "₹199",
+        image: "/images/dish_chocolate_idli_4_pcs.jpeg",
         tag: "Unique"
       },
       {
-        id: "sw2",
-        name: "Chocolate Idli (4 Pcs)",
-        category: "Sweet Dish",
-        description: "Warm soft steamed chocolate-infused idlis bathed in warm chocolate ganache. A delightful dessert twist.",
-        price: "₹179",
-        image: "/images/dish_chocolate_idli_4_pcs.jpeg",
-        tag: "Kids Love It"
-      },
-      {
-        id: "sw3",
-        name: "Mini Chocolate Pancakes (12 Pcs)",
-        category: "Sweet Dish",
-        description: "Bite-sized fluffy golden pancakes topped with decadent melted chocolate and chocolate chips.",
-        price: "₹249",
+        id: "d3",
+        name: "Mini Chocolate Pancakes (12 pcs)",
+        category: "Sweet Tooth",
+        description: "Twelve bite-sized fluffy buttermilk pancakes crowned with warm chocolate sauce and powdered sugar.",
+        price: "₹229",
         image: "/images/dish_mini_chocolate_pancakes_12_pcs.jpeg",
-        tag: "Dessert Platter"
+        tag: "Bestseller Dessert"
       }
     ]
   },
   {
-    id: "south-indian-lunch",
-    title: "The South Indian Lunch",
+    id: "rice-meals",
+    title: "The South Indian Lunch & Comfort Rice Meals",
     subtitle: "Complete comforting homestyle rice meals prepared slow and served piping hot.",
     items: [
       {
@@ -331,7 +383,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         description: "Aromatic black-pepper and tamarind slow-simmered rasam mixed with fragrant steamed rice. Pure healing comfort.",
         price: "₹249",
         image: "/images/food_south_indian_thali_1793814074632.jpg",
-        tag: "Healing Comfort"
+        tag: "Soul Food"
       },
       {
         id: "m2",
@@ -348,7 +400,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "The South Indian Lunch",
         description: "Tangy slow-roasted ripe tomato reduction tossed with fluffy rice, mustard seeds, roasted cashews, and fresh cilantro.",
         price: "₹249",
-        image: "/images/hero_indian_feast_1793814073236.jpg",
+        image: "/images/dish_spiced_tomato_rice.jpg",
         tag: "Chef Special"
       },
       {
@@ -364,49 +416,156 @@ export const MENU_CATEGORIES: MenuCategory[] = [
   }
 ];
 
-
 export const FRANCHISE_MODELS = [
   {
-    id: "Single Franchisee",
-    title: "Cloud Kitchen Pro (Dark Kitchen)",
-    badge: "Most Popular · High ROI",
-    tagline: "For ambitious entrepreneurs & dark kitchen operators",
-    description: "Full delivery hub operating on Swiggy, Zomato and direct WhatsApp orders covering a 7km radius. Low Capex with zero expensive dining hall rent.",
+    id: "Cloud Kitchen",
+    title: "Cloud Kitchen (Delivery Only)",
+    track: "Cloud Kitchen Pro",
+    badge: "Most Popular · High Margin",
+    tagline: "For delivery-first cloud kitchen operators & entrepreneurs",
+    description: "100% delivery kitchen fulfilling orders across Swiggy, Zomato, Magicpin, and direct automated WhatsApp ordering covering a 7km delivery radius.",
+    franchiseFee: "₹4,00,000",
+    setupCost: "₹5,00,000 – ₹6,00,000",
+    totalInvestment: "₹9 Lakhs – ₹10 Lakhs",
+    areaRequired: "200 – 250 Sq. Ft.",
+    tenure: "5 Years",
+    royalty: "Flat 5% on Net Sales",
+    paybackPeriod: "ROI in 6 to 8 Months",
     features: [
-      "Footprint: 150 – 250 Sq. Ft. (Low-rent back alley / upper floor)",
-      "One-time Franchise Fee: ₹3,99,000 (Non-Refundable)",
-      "Low 5% Monthly Royalty on Net Sales (No yearly renewal fee)",
-      "Standardised Premixes & SOPs (No Master Chef dependency)",
-      "Turnkey Setup & Staff Kitchen Drills in 21 Days",
-      "Direct WhatsApp Automated Ordering Integration"
+      "Franchise Fee: ₹4,00,000 (5 Years Tenure)",
+      "Kitchen Setup Cost: ₹5,00,000 to ₹6,00,000",
+      "Area Required: 200 – 250 Sq. Ft. (Low-rent back alley / upper floor)",
+      "Flat 5% Monthly Royalty on Net Sales (Zero renewal surprises)",
+      "ROI in 6 to 8 Months with 28% to 35% net profit margins",
+      "Standardised Premixes & SOPs (Zero Master Chef dependency)",
+      "Swiggy, Zomato & Magicpin Merchant Onboarding & Menu Curation",
+      "Direct 0% Commission WhatsApp Automated Ordering Setup",
+      "Complete Kitchen Staff Training & Drills in 21 Days"
     ],
-    highlight: "Payback in 4 to 6 months with 28% to 35% estimated net operating margins."
+    highlight: "Lean capex, minimal staff (2–3 members), and rapid capital payback."
   },
   {
-    id: "Master Franchise",
-    title: "City Master Franchise",
-    badge: "Territory Exclusivity",
-    tagline: "For seasoned investors seeking multi-unit regional expansion",
-    description: "Exclusive master franchise rights for an entire city or district with cluster dark kitchen development and sub-franchise royalty sharing.",
+    id: "Cloud Kitchen + Dine-In",
+    title: "Cloud Kitchen + Dine-In Restaurant",
+    track: "Cloud Kitchen Pro",
+    badge: "Dual Revenue Streams",
+    tagline: "Hybrid delivery hub plus vibrant quick-service restaurant",
+    description: "Combines high-volume delivery kitchen with a warm, welcoming quick-service dine-in restaurant for maximum local footfall and neighborhood customer loyalty.",
+    franchiseFee: "₹6,00,000",
+    setupCost: "₹7,00,000 – ₹8,00,000",
+    totalInvestment: "₹13 Lakhs – ₹14 Lakhs",
+    areaRequired: "300 – 350 Sq. Ft.",
+    tenure: "5 Years",
+    royalty: "Flat 5% on Net Sales",
+    paybackPeriod: "ROI in 6 to 8 Months",
     features: [
-      "Exclusive territorial brand exclusivity for your entire city",
-      "One-time Master Franchise Fee: ₹12,50,000",
-      "Sub-franchising rights with 50% fee & royalty sharing",
-      "Centralised premix distribution & logistics synergy",
-      "Priority launch marketing & dedicated regional support",
-      "Lifetime agreement validity with 5% monthly royalty"
+      "Franchise Fee: ₹6,00,000 (5 Years Tenure)",
+      "Kitchen & Dine-In Setup Cost: ₹7,00,000 to ₹8,00,000",
+      "Area Required: 300 – 350 Sq. Ft. (High-footfall ground floor)",
+      "Flat 5% Monthly Royalty on Net Sales (5 Years Agreement)",
+      "ROI in 6 to 8 Months with dual in-store + online cash flow",
+      "Complete Interior Aesthetics, Seating & Signage Blueprint",
+      "Full Commercial Kitchen + Front-of-House Dining Setup",
+      "Swiggy, Zomato, Magicpin + Walk-in Table Ordering Integration",
+      "Comprehensive Managerial & Customer Service Staff Training"
     ],
-    highlight: "Designed for high-net-worth investors and F&B business groups."
+    highlight: "Dual revenue streams: walk-in dine-in guests plus high-volume aggregator deliveries."
+  },
+  {
+    id: "Master Franchise (Cloud Kitchen)",
+    title: "Master Franchise (Cloud Kitchen)",
+    track: "City Master Franchise",
+    badge: "Territory Exclusivity",
+    tagline: "For investors seeking city-wide dark kitchen network rights",
+    description: "Exclusive territorial development rights to establish and sub-franchise delivery-only cloud kitchens across an entire city or district.",
+    franchiseFee: "₹20,00,000",
+    setupCost: "Per Unit Basis",
+    totalInvestment: "Custom Regional Deployment",
+    areaRequired: "200 – 250 Sq. Ft. per unit",
+    tenure: "5 Years",
+    royalty: "Flat 5% on Net Sales",
+    paybackPeriod: "Strategic Territorial Scaling",
+    features: [
+      "Master Franchise Fee: ₹20,00,000 (5 Years Tenure)",
+      "Exclusive brand rights for your chosen city / district",
+      "Sub-franchise development rights with fee & royalty sharing",
+      "Centralised dry spice premixes & supply chain synergy",
+      "Priority digital marketing & regional campaign management",
+      "Direct guidance from Founder Aditya Kuttan for territorial rollout"
+    ],
+    highlight: "High equity value with multi-unit sub-franchising revenue streams."
+  },
+  {
+    id: "Master Franchise (Cloud + Dine-In)",
+    title: "Master Franchise (Cloud + Dine-In)",
+    track: "City Master Franchise",
+    badge: "Flagship Regional Rights",
+    tagline: "For F&B groups building hybrid restaurant networks",
+    description: "Comprehensive city development rights covering both delivery hubs and flagship dine-in restaurants across the designated metropolitan territory.",
+    franchiseFee: "₹25,00,000",
+    setupCost: "Per Unit Basis",
+    totalInvestment: "Flagship Regional Deployment",
+    areaRequired: "300 – 350 Sq. Ft. per unit",
+    tenure: "5 Years",
+    royalty: "Flat 5% on Net Sales",
+    paybackPeriod: "Strategic Territorial Scaling",
+    features: [
+      "Master Franchise Fee: ₹25,00,000 (5 Years Tenure)",
+      "Exclusive city rights for both cloud kitchens and dine-in restaurants",
+      "Sub-franchising rights across both formats with revenue sharing",
+      "Centralised supply chain and regional warehouse support",
+      "Full turnkey store setup templates and architectural guidance",
+      "Highest priority operational, recruitment, and marketing support"
+    ],
+    highlight: "The ultimate regional F&B asset combining dark kitchen scalability with restaurant visibility."
   }
 ];
 
+export const SETUP_COST_BREAKDOWN = [
+  {
+    category: "Commercial Kitchen Equipment",
+    cloudKitchen: "₹1,80,000 – ₹2,20,000",
+    cloudPlusDineIn: "₹2,50,000 – ₹3,00,000",
+    details: "Induction hot plates, dosa tawas, heavy-duty mixers, stainless steel worktables, deep freezers & refrigeration."
+  },
+  {
+    category: "Exhaust & Ventilation Setup",
+    cloudKitchen: "₹70,000 – ₹90,000",
+    cloudPlusDineIn: "₹1,00,000 – ₹1,30,000",
+    details: "Commercial centrifugal exhaust hoods, ducting, fresh air intake, and fire safety compliance."
+  },
+  {
+    category: "Cloud POS, Tech & Printers",
+    cloudKitchen: "₹45,000 – ₹55,000",
+    cloudPlusDineIn: "₹60,000 – ₹75,000",
+    details: "Touchscreen POS terminal, thermal KOT printers, barcode scanners, and direct WhatsApp auto-dispatch gateway."
+  },
+  {
+    category: "Store Interiors & Branding",
+    cloudKitchen: "₹65,000 – ₹85,000",
+    cloudPlusDineIn: "₹1,80,000 – ₹2,20,000",
+    details: "Hygienic epoxy flooring, washable walls, ACP exterior signage (plus furniture, ambient lighting & seating for dine-in)."
+  },
+  {
+    category: "Initial Inventory & Packaging",
+    cloudKitchen: "₹80,000 – ₹95,000",
+    cloudPlusDineIn: "₹95,000 – ₹1,15,000",
+    details: "First month supply of secret dry spice premixes, branded heat-sealed containers, delivery carry bags, and dry pantry items."
+  },
+  {
+    category: "Staff Onboarding & Drills",
+    cloudKitchen: "₹40,000 – ₹55,000",
+    cloudPlusDineIn: "₹55,000 – ₹60,000",
+    details: "Staff uniforms, hairnets, food safety certifications, 7-day on-site operational drills, and aggregator launch marketing."
+  }
+];
 
 export const WHY_PARTNER_PILLARS = [
   {
     number: "01",
     title: "Authentic Home-Style Food",
-    subtitle: "A differentiated menu rooted in maternal affection",
-    description: "In a market dominated by commercial fast food, Mom's Cloud Kitchen serves simple, pure, and wholesome comfort food that families and working professionals can enjoy every single day."
+    subtitle: "Made By Mom Loved By All",
+    description: "In a market dominated by commercial fast food, Mom's Cloud Kitchen serves simple, pure, and wholesome comfort food that families and working professionals enjoy every day."
   },
   {
     number: "02",
@@ -423,13 +582,13 @@ export const WHY_PARTNER_PILLARS = [
   {
     number: "04",
     title: "Proven 4,000+ Order Track Record",
-    subtitle: "Battle-tested cloud kitchen operations",
+    subtitle: "Battle-tested kitchen operations in Vasai–Virar",
     description: "Founded in February 2024, our model has fulfilled over 4,000+ orders across top delivery aggregators (Swiggy, Zomato, Magicpin) with high repeat customer affinity."
   },
   {
     number: "05",
-    title: "Rooted in Real Community Trust",
-    subtitle: "Built from local authenticity in Vasai–Virar",
-    description: "Our strong foundation in the Vasai-Virar region proves that authentic home-style food commands organic word-of-mouth trust and sustainable demand."
+    title: "Women Empowerment Initiative",
+    subtitle: "We Cook With Love, We Grow Together",
+    description: "We provide women a dignified platform where cooking becomes their strength, their identity, and their path to financial independence."
   }
 ];

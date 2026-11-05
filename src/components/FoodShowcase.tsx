@@ -16,33 +16,33 @@ export const FoodShowcase: React.FC = () => {
   };
 
   return (
-    <section id="food" className="py-16 sm:py-24 lg:py-32 bg-[#F6EBDD] border-b border-[#28231E]/8 overflow-hidden">
+    <section id="menu" className="py-16 sm:py-24 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Editorial Section Header */}
         <ScrollReveal direction="up" className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-14">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#E87924]">
-                Our Food Identity
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#E87924]">
+                Our Food Identity · 100% Pure Veg
               </span>
               <span className="h-px w-8 bg-[#E87924]" />
             </div>
 
-            <h2 className="font-display font-black text-3xl sm:text-5xl text-[#174B35] tracking-tight leading-[1.12]">
-              MADE WITH LOVE. <br className="hidden sm:inline" />
-              SERVED WITH CARE.
+            <h2 className="font-display font-black text-3xl sm:text-5xl text-[#28231E] tracking-tight leading-[1.12]">
+              MADE BY MOM. <br className="hidden sm:inline" />
+              LOVED BY ALL.
             </h2>
 
             <p className="mt-4 text-base sm:text-lg text-[#28231E]/80 leading-relaxed text-pretty">
-              Explore the authentic flavours and comforting meals that represent Mom&apos;s Cloud Kitchen.
-              Curated recipes designed for daily home consumption, high delivery margins, and sustainable kitchen operations.
+              Explore authentic flavours and comforting home-style meals.
+              Curated recipes designed for daily home consumption, high delivery margins, and standardized kitchen operations.
             </p>
           </div>
 
           <div className="shrink-0 flex items-center gap-4">
             <button
               onClick={() => scrollTo('#franchise-enquiry')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-bold text-[#E87924] hover:text-[#D16719] bg-white px-5 py-3 rounded-xl border border-[#28231E]/10 shadow-sm transition-all hover:shadow cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#E87924] hover:text-[#D16719] bg-white px-5 py-3 rounded-xl border border-[#E87924]/30 shadow-xs transition-all hover:shadow cursor-pointer"
             >
               <span>Explore Franchise Menu Rights</span>
               <ArrowRight className="w-4 h-4" />
@@ -50,7 +50,7 @@ export const FoodShowcase: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* Category Navigation Pills with smooth layoutId animation */}
+        {/* Category Navigation Pills */}
         <div className="relative mb-8">
           <div className="flex items-center gap-2 overflow-x-auto pb-3 pt-1 px-1 -mx-4 sm:mx-0 sm:px-0 scrollbar-none snap-x snap-mandatory">
             {MENU_CATEGORIES.map((category) => {
@@ -61,14 +61,14 @@ export const FoodShowcase: React.FC = () => {
                   onClick={() => setActiveCategoryId(category.id)}
                   className={`relative px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 whitespace-nowrap cursor-pointer shrink-0 snap-start select-none ${
                     isActive
-                      ? 'text-[#FFF8EC] shadow-md'
-                      : 'text-[#28231E]/80 bg-white/90 hover:bg-white hover:text-[#174B35] border border-[#28231E]/12'
+                      ? 'text-white shadow-md'
+                      : 'text-[#28231E]/80 bg-white hover:bg-[#FFF3E3] hover:text-[#E87924] border border-[#E87924]/20'
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="activeCategoryPill"
-                      className="absolute inset-0 bg-[#174B35] rounded-full -z-10 shadow-md"
+                      className="absolute inset-0 bg-[#E87924] rounded-full -z-10 shadow-md"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -80,9 +80,9 @@ export const FoodShowcase: React.FC = () => {
         </div>
 
         {/* Category Context Banner */}
-        <div className="mb-8 p-4 sm:p-5 bg-white/80 backdrop-blur-md rounded-2xl border border-[#28231E]/8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="mb-8 p-4 sm:p-5 bg-white rounded-2xl border border-[#E87924]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
           <div>
-            <h3 className="font-display font-bold text-lg sm:text-xl text-[#174B35]">
+            <h3 className="font-display font-bold text-lg sm:text-xl text-[#28231E]">
               {activeCategory.title}
             </h3>
             <p className="text-xs sm:text-sm text-[#28231E]/75 mt-0.5">
@@ -90,13 +90,13 @@ export const FoodShowcase: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#E87924] bg-[#E87924]/10 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#E87924] bg-[#FFF3E3] border border-[#E87924]/20 px-3 py-1 rounded-full">
               {activeCategory.items.length} Signature Dishes
             </span>
           </div>
         </div>
 
-        {/* Responsive Grid with AnimatePresence & Staggered Cards */}
+        {/* Responsive Grid with AnimatePresence */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategoryId}
@@ -112,7 +112,7 @@ export const FoodShowcase: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="bg-white rounded-3xl overflow-hidden border border-[#28231E]/10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+                className="bg-white rounded-3xl overflow-hidden border border-[#E87924]/20 shadow-sm hover:shadow-xl hover:border-[#E87924] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
               >
                 <div>
                   {/* Dish Image Container */}
@@ -137,21 +137,21 @@ export const FoodShowcase: React.FC = () => {
                         <div className="w-2.5 h-2.5 rounded-full bg-green-600" />
                       </div>
                       {item.tag && (
-                        <span className="bg-[#174B35]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                        <span className="bg-[#E87924]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
                           {item.tag}
                         </span>
                       )}
                     </div>
 
                     {/* Price Tag Pill */}
-                    <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-[#174B35] font-display font-black text-base px-3.5 py-1 rounded-xl shadow-md tabular-nums border border-[#174B35]/15">
+                    <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-[#28231E] font-display font-black text-base px-3.5 py-1 rounded-xl shadow-md tabular-nums border border-[#E87924]/30">
                       {item.price}
                     </div>
                   </div>
 
                   {/* Content Block */}
                   <div className="p-5 sm:p-6">
-                    <h4 className="font-display font-bold text-lg sm:text-xl text-[#174B35] group-hover:text-[#E87924] transition-colors leading-tight mb-2">
+                    <h4 className="font-display font-bold text-lg sm:text-xl text-[#28231E] group-hover:text-[#E87924] transition-colors leading-tight mb-2">
                       {item.name}
                     </h4>
                     <p className="text-xs sm:text-sm text-[#28231E]/75 leading-relaxed line-clamp-3">
@@ -161,14 +161,14 @@ export const FoodShowcase: React.FC = () => {
                 </div>
 
                 {/* Card Action & Highlights */}
-                <div className="px-5 sm:px-6 py-3.5 bg-[#FFF8EC]/70 border-t border-[#28231E]/8 flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-1.5 font-medium text-[#174B35]">
+                <div className="px-5 sm:px-6 py-3.5 bg-[#FFF9F2] border-t border-[#E87924]/15 flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 font-medium text-[#28231E]">
                     <Sparkles className="w-3.5 h-3.5 text-[#E87924]" />
                     Home-Style Recipe
                   </span>
 
                   <a
-                    href={`https://wa.me/919892447728?text=${encodeURIComponent(
+                    href={`https://wa.me/918484030988?text=${encodeURIComponent(
                       `Hello Aditya, I want to enquire about "${item.name}" from Mom's Cloud Kitchen.`
                     )}`}
                     target="_blank"
@@ -185,9 +185,9 @@ export const FoodShowcase: React.FC = () => {
         </AnimatePresence>
 
         {/* Editorial Note for Franchisees */}
-        <div className="mt-12 text-center p-6 bg-white/70 backdrop-blur-sm rounded-2xl border border-[#28231E]/8 max-w-2xl mx-auto shadow-xs">
+        <div className="mt-12 text-center p-6 bg-white rounded-2xl border border-[#E87924]/20 max-w-2xl mx-auto shadow-xs">
           <p className="text-xs sm:text-sm text-[#28231E]/80 leading-relaxed">
-            <strong className="text-[#174B35] font-bold">Standardized SOPs:</strong> All 23 signature dishes use pre-measured spice mixes and streamlined kitchen prep methods to guarantee zero chef dependency and rapid 8–12 minute order dispatch.
+            <strong className="text-[#E87924] font-bold">Standardized SOPs:</strong> All 23 signature dishes use pre-measured dry spice mixes and streamlined kitchen prep methods to guarantee zero chef dependency and rapid 8–12 minute order dispatch.
           </p>
         </div>
       </div>

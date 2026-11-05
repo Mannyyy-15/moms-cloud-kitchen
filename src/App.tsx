@@ -8,7 +8,9 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { BrandStory } from './components/BrandStory';
 import { Statistics } from './components/Statistics';
+import { PromoBanner } from './components/PromoBanner';
 import { MissionVision } from './components/MissionVision';
+import { WomenEmpowerment } from './components/WomenEmpowerment';
 import { WhyPartner } from './components/WhyPartner';
 import { FranchiseOpportunity } from './components/FranchiseOpportunity';
 import { FranchiseModels } from './components/FranchiseModels';
@@ -28,7 +30,7 @@ import { captureAndStoreUtm } from './utils/utm';
 
 export default function App() {
   const [selectedFranchiseType, setSelectedFranchiseType] =
-    useState<FranchiseType>('Single Franchisee');
+    useState<FranchiseType>('Cloud Kitchen');
   const [isLegalOpen, setIsLegalOpen] = useState(false);
   const [legalTab, setLegalTab] = useState<LegalTab>('franchise-terms');
 
@@ -53,7 +55,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF8EC] text-[#28231E] selection:bg-[#E87924] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#FFF9F2] text-[#28231E] selection:bg-[#E87924] selection:text-white">
       {/* A. Header: Sticky Navigation Bar */}
       <Navbar onSelectFranchise={handleSelectModel} />
 
@@ -67,8 +69,14 @@ export default function App() {
         {/* C2. Brand Milestones & Statistics: Animated Number Counters */}
         <Statistics />
 
+        {/* Expansion / Promo Banner Section */}
+        <PromoBanner />
+
         {/* C3. Mission, Vision, and Values */}
         <MissionVision />
+
+        {/* C4. Women Empowerment Initiative */}
+        <WomenEmpowerment />
 
         {/* D. Why Choose This Franchise?: Zero Chef Dependency, 28-35% Margins */}
         <WhyPartner />
@@ -76,7 +84,7 @@ export default function App() {
         {/* E. Franchise Opportunity Transition */}
         <FranchiseOpportunity />
 
-        {/* E2. Franchise Models: Single Franchisee (₹3.99L) & Master Franchise (₹12.50L) */}
+        {/* E2. Franchise Models: Cloud Kitchen (₹4L) & Cloud + Dine-In (₹6L) & Master */}
         <FranchiseModels onSelectModel={handleSelectModel} />
 
         {/* E3. Interactive Unit Economics & ROI Calculator */}

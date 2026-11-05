@@ -39,13 +39,13 @@ export const StickyMobileBar: React.FC = () => {
   return (
     <aside 
       aria-label="Mobile Enquiry Bar"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#28231E]/10 p-3 shadow-[0_-8px_20px_rgba(0,0,0,0.12)] animate-in slide-in-from-bottom duration-300"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t-2 border-[#E87924]/20 p-3 shadow-[0_-8px_20px_rgba(0,0,0,0.12)] animate-in slide-in-from-bottom duration-300"
     >
       <div className="flex items-center gap-2 max-w-md mx-auto">
         {/* Quick Call */}
         <a
           href={`tel:${BRAND_INFO.phoneClean}`}
-          className="w-11 h-11 rounded-xl bg-[#FFF8EC] border border-[#28231E]/12 flex items-center justify-center text-[#174B35] shrink-0 active:scale-95 transition-transform"
+          className="w-11 h-11 rounded-xl bg-[#FFF3E3] border border-[#E87924]/30 flex items-center justify-center text-[#E87924] shrink-0 active:scale-95 transition-transform"
           aria-label="Call Mom's Cloud Kitchen Founder"
         >
           <Phone className="w-5 h-5" />
@@ -65,7 +65,7 @@ export const StickyMobileBar: React.FC = () => {
         {/* Primary CTA: Enquire Now */}
         <button
           onClick={scrollToForm}
-          className="flex-grow py-3 px-4 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+          className="flex-grow py-3 px-4 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
         >
           <span>Enquire for Franchise</span>
           <ArrowRight className="w-4 h-4" />
@@ -74,4 +74,3 @@ export const StickyMobileBar: React.FC = () => {
     </aside>
   );
 };
-

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, CheckCircle2, AlertCircle, Loader2, Phone, Mail, MessageSquare, ExternalLink, ShieldCheck, Clock } from 'lucide-react';
+import { Send, CheckCircle2, AlertCircle, Loader2, Phone, Mail, MessageSquare, ExternalLink, ShieldCheck, Clock, Instagram } from 'lucide-react';
 import { BRAND_INFO } from '../data/brandData';
 import { FranchiseFormData, FranchiseType } from '../types';
 import { ScrollReveal, TextReveal } from './ScrollReveal';
@@ -11,14 +11,14 @@ interface FranchiseFormProps {
 }
 
 export const FranchiseForm: React.FC<FranchiseFormProps> = ({
-  selectedFranchiseType = 'Single Franchisee',
+  selectedFranchiseType = 'Cloud Kitchen',
 }) => {
   const [formData, setFormData] = useState<FranchiseFormData>({
     fullName: '',
     contactNumber: '',
     email: '',
     city: '',
-    investmentBudget: '₹4 Lakhs – ₹7 Lakhs (Single Cloud Kitchen Pro)',
+    investmentBudget: '₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)',
     timeline: 'Immediately (Within 30 Days)',
     brand: BRAND_INFO.name,
     franchiseType: selectedFranchiseType,
@@ -54,11 +54,11 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
       errs.fullName = 'Please enter your full name.';
     }
 
-    // Indian 10-digit mobile number format (optional +91)
+    // Indian 10-digit mobile number format
     const cleanPhone = formData.contactNumber.replace(/[\s\-()]/g, '');
     const phoneRegex = /^(\+91)?[6-9]\d{9}$/;
     if (!cleanPhone || !phoneRegex.test(cleanPhone)) {
-      errs.contactNumber = 'Please enter a valid 10-digit mobile number (e.g. 9892447728).';
+      errs.contactNumber = 'Please enter a valid 10-digit mobile number (e.g. 8484030988).';
     }
 
     // Email validation
@@ -106,190 +106,201 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
       return;
     }
 
-    if (isSubmitting) return; // Prevent duplicate clicks
     setIsSubmitting(true);
 
-    const waText = buildWhatsAppMessage();
-    const waUrl = `https://wa.me/919892447728?text=${encodeURIComponent(waText)}`;
-    setLastWhatsAppUrl(waUrl);
+    const waMsg = buildWhatsAppMessage();
+    const encodedWaUrl = `https://wa.me/918484030988?text=${encodeURIComponent(waMsg)}`;
+    setLastWhatsAppUrl(encodedWaUrl);
 
     try {
-      // 1. Submit verified lead payload with attribution to FormSubmit API
-      const response = await fetch(BRAND_INFO.formEndpoint, {
+      const payload = {
+        name: formData.fullName.trim(),
+        phone: formData.contactNumber.trim(),
+        email: formData.email.trim(),
+        city: formData.city.trim(),
+        investment_budget: formData.investmentBudget,
+        timeline: formData.timeline || 'Within 30 Days',
+        franchise_type: formData.franchiseType,
+        notes: formData.message.trim(),
+        brand: BRAND_INFO.name,
+        utm_source: formData.utm_source || '',
+        utm_medium: formData.utm_medium || '',
+        utm_campaign: formData.utm_campaign || '',
+        utm_content: formData.utm_content || '',
+        utm_term: formData.utm_term || '',
+        fbclid: formData.fbclid || '',
+        _subject: `New Franchise Lead: ${formData.fullName.trim()} (${formData.city.trim()})`,
+        _template: 'table',
+      };
+
+      const res = await fetch(BRAND_INFO.formEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify({
-          'Full Name': formData.fullName,
-          'Mobile Number': formData.contactNumber,
-          Email: formData.email,
-          'Target City / Area': formData.city,
-          'Investment Budget': formData.investmentBudget,
-          Timeline: formData.timeline || 'Immediate',
-          'Franchise Model': formData.franchiseType,
-          Brand: formData.brand,
-          Notes: formData.message || 'No additional notes provided.',
-          Consent: formData.consent ? 'Agreed' : 'No',
-          // Campaign Attribution Data (Meta Ads)
-          utm_source: formData.utm_source || 'direct',
-          utm_medium: formData.utm_medium || 'website',
-          utm_campaign: formData.utm_campaign || 'franchise_meta_ads',
-          utm_content: formData.utm_content || '',
-          utm_term: formData.utm_term || '',
-          fbclid: formData.fbclid || '',
-          _subject: `New Franchise Lead: ${formData.fullName} - ${formData.franchiseType} (${formData.city})`,
-        }),
+        body: JSON.stringify(payload),
       });
 
-      // 2. Track Meta Pixel Lead event ONLY upon confirmed submission
+      if (res.ok) {
+        trackFranchiseLead({
+          model: formData.franchiseType,
+          city: formData.city.trim(),
+        });
+
+        setSubmitSuccess(true);
+        setIsSubmitting(false);
+
+        // Auto redirect to WhatsApp after 1 second
+        setTimeout(() => {
+          window.open(encodedWaUrl, '_blank');
+        }, 1200);
+      } else {
+        // Fallback to WhatsApp redirect if mail API throttles
+        trackFranchiseLead({
+          model: formData.franchiseType,
+          city: formData.city.trim(),
+        });
+        setSubmitSuccess(true);
+        setIsSubmitting(false);
+        window.open(encodedWaUrl, '_blank');
+      }
+    } catch (err) {
+      console.warn('Form submission encountered network error, falling back to direct WhatsApp:', err);
       trackFranchiseLead({
         model: formData.franchiseType,
-        city: formData.city,
+        city: formData.city.trim(),
       });
-
-      // 3. Open WhatsApp pre-filled conversation directly for instant fast-track
-      try {
-        window.open(waUrl, '_blank', 'noopener,noreferrer');
-      } catch (err) {
-        console.warn('Popup blocked, fallback button available on screen', err);
-      }
-
       setSubmitSuccess(true);
-    } catch (err: unknown) {
-      console.error('Lead submission network issue:', err);
-      // Fallback: still fire WhatsApp and mark success since lead is addressed to Aditya
-      trackFranchiseLead({ model: formData.franchiseType, city: formData.city });
-      try {
-        window.open(waUrl, '_blank', 'noopener,noreferrer');
-      } catch {}
-      setSubmitSuccess(true);
-    } finally {
       setIsSubmitting(false);
+      window.open(encodedWaUrl, '_blank');
     }
   };
 
   return (
-    <section id="franchise-enquiry" className="py-16 sm:py-24 lg:py-32 bg-[#FFF8EC] border-b border-[#28231E]/8">
+    <section id="franchise-enquiry" className="py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-          {/* Left Column: Trust, Social Proof & Direct Support */}
-          <ScrollReveal direction="up" delay={0.1} className="lg:col-span-5 flex flex-col justify-between space-y-6 sm:space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Column: Trust, Guidance & Direct Contact Channels */}
+          <ScrollReveal direction="up" className="lg:col-span-5 flex flex-col justify-between">
             <div>
               <div className="inline-flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#E87924]">
-                  Franchise Application Form
+                <span className="text-xs font-black uppercase tracking-[0.25em] text-[#E87924]">
+                  Franchise Application Desk
                 </span>
                 <span className="h-px w-8 bg-[#E87924]" />
               </div>
 
               <TextReveal
-                text="READY TO EXPLORE YOUR FRANCHISE OPPORTUNITY?"
+                text="EXPLORE YOUR FRANCHISE OPPORTUNITY."
                 as="h2"
-                className="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-[#174B35] tracking-tight leading-[1.15] mb-4 text-balance"
+                className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#28231E] tracking-tight leading-[1.12] mb-4"
               />
 
-              <p className="text-sm sm:text-base lg:text-lg text-[#28231E]/80 leading-relaxed">
-                Take the first step toward launching a high-margin dark kitchen in your territory.
-                Submissions are reviewed directly by <strong>Founder Aditya Pushpa Kuttan</strong> with complete confidentiality.
+              <p className="text-sm sm:text-base text-[#28231E]/80 leading-relaxed mb-6 font-normal">
+                Submit your expression of interest below. Connect directly with Founder{' '}
+                <strong className="text-[#E87924]">Aditya Kuttan</strong> to review territory viability, kitchen equipment capex, and unit economics.
               </p>
-            </div>
 
-            {/* Trust Pill Highlights */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-[#28231E]/8 shadow-xs">
-                <div className="w-9 h-9 rounded-xl bg-[#174B35]/10 text-[#174B35] flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
+              {/* 3 Trust Callouts */}
+              <div className="space-y-3.5 mb-8">
+                <div className="flex items-start gap-3 p-3.5 bg-white rounded-2xl border border-[#E87924]/20 shadow-xs">
+                  <div className="w-8 h-8 rounded-xl bg-[#FFF3E3] text-[#E87924] flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-[#28231E] block">5-Year Agreement &amp; Flat 5% Royalty</span>
+                    <span className="text-[11px] text-[#28231E]/70 block leading-tight mt-0.5">
+                      No surprise yearly renewals. Standardized dry premixes with zero chef dependency.
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs font-bold text-[#174B35] block">Verified Business Performance</span>
-                  <span className="text-[11px] text-[#28231E]/70 block">Over 4,000+ orders fulfilled across Swiggy, Zomato & Magicpin</span>
+
+                <div className="flex items-start gap-3 p-3.5 bg-white rounded-2xl border border-[#E87924]/20 shadow-xs">
+                  <div className="w-8 h-8 rounded-xl bg-[#FFF3E3] text-[#E87924] flex items-center justify-center shrink-0">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-[#28231E] block">ROI in 6 to 8 Months</span>
+                    <span className="text-[11px] text-[#28231E]/70 block leading-tight mt-0.5">
+                      Proven unit economics: 28% to 35% net margin on lean 200–350 sq.ft. footprints.
+                    </span>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-[#28231E]/8 shadow-xs">
-                <div className="w-9 h-9 rounded-xl bg-[#E87924]/10 text-[#E87924] flex items-center justify-center shrink-0">
-                  <Clock className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-[#174B35] block">Fast-Track Review</span>
-                  <span className="text-[11px] text-[#28231E]/70 block">Discovery call scheduled within 24 business hours</span>
-                </div>
-              </div>
             </div>
 
-            {/* Direct Communication Channels */}
-            <div className="p-5 sm:p-6 bg-[#F6EBDD] rounded-3xl border border-[#28231E]/10 space-y-3.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#174B35] block">
-                Direct Founder Communication
+            {/* Direct Instant Reach Out Strip */}
+            <div className="pt-6 border-t border-[#E87924]/20 space-y-3">
+              <span className="text-xs font-black uppercase tracking-wider text-[#28231E]/70 block">
+                Direct Founder Contact:
               </span>
 
               <a
                 href={BRAND_INFO.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#28231E]/8 hover:border-[#25D366]/50 transition-colors group shadow-xs"
+                className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-[#E87924]/20 hover:border-[#25D366] transition-colors group shadow-xs"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition-colors">
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <div>
                   <span className="text-[11px] text-[#28231E]/60 block font-medium">Instant WhatsApp Support</span>
-                  <span className="text-sm font-bold text-[#174B35]">{BRAND_INFO.phone}</span>
+                  <span className="text-sm font-black text-[#28231E]">{BRAND_INFO.phoneDisplay}</span>
                 </div>
               </a>
 
               <a
                 href={`tel:${BRAND_INFO.phoneClean}`}
-                className="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#28231E]/8 hover:border-[#174B35]/40 transition-colors group shadow-xs"
+                className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-[#E87924]/20 hover:border-[#E87924] transition-colors group shadow-xs"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#174B35]/10 text-[#174B35] flex items-center justify-center shrink-0 group-hover:bg-[#174B35] group-hover:text-white transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#FFF3E3] text-[#E87924] flex items-center justify-center shrink-0 group-hover:bg-[#E87924] group-hover:text-white transition-colors">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
                   <span className="text-[11px] text-[#28231E]/60 block font-medium">Direct Telephone Enquiry</span>
-                  <span className="text-sm font-bold text-[#28231E]">{BRAND_INFO.phone}</span>
+                  <span className="text-sm font-black text-[#28231E]">{BRAND_INFO.phoneDisplay}</span>
                 </div>
               </a>
 
               <a
                 href={`mailto:${BRAND_INFO.email}`}
-                className="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#28231E]/8 hover:border-[#E87924]/40 transition-colors group shadow-xs"
+                className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-[#E87924]/20 hover:border-[#E87924] transition-colors group shadow-xs"
               >
-                <div className="w-10 h-10 rounded-lg bg-[#E87924]/10 text-[#E87924] flex items-center justify-center shrink-0 group-hover:bg-[#E87924] group-hover:text-white transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-[#FFF3E3] text-[#E87924] flex items-center justify-center shrink-0 group-hover:bg-[#E87924] group-hover:text-white transition-colors">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
                   <span className="text-[11px] text-[#28231E]/60 block font-medium">Franchise Desk Email</span>
-                  <span className="text-sm font-bold text-[#28231E]">{BRAND_INFO.email}</span>
+                  <span className="text-sm font-black text-[#28231E]">{BRAND_INFO.email}</span>
                 </div>
               </a>
             </div>
           </ScrollReveal>
 
-          {/* Right Column: Conversion-Focused Enquiry Form */}
-          <ScrollReveal direction="up" delay={0.2} className="lg:col-span-7">
-            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-[#28231E]/10">
+          {/* Right Column: High-Converting Enquiry Form */}
+          <ScrollReveal direction="up" delay={0.15} className="lg:col-span-7">
+            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-[#E87924]/20">
               {submitSuccess ? (
                 /* Confirmed Success State */
                 <div className="text-center py-10 px-2 animate-in fade-in duration-300">
-                  <div className="w-16 h-16 rounded-full bg-[#174B35]/10 text-[#174B35] flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 className="w-10 h-10 text-[#174B35]" />
+                  <div className="w-16 h-16 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-[#25D366]" />
                   </div>
-                  <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-[#174B35] mb-2">
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-[#28231E] mb-2">
                     Thank You, {formData.fullName}!
                   </h3>
                   <p className="text-sm sm:text-base text-[#28231E]/80 max-w-md mx-auto leading-relaxed mb-6">
                     Your franchise application for <strong>{formData.franchiseType}</strong> in{' '}
                     <strong>{formData.city}</strong> has been registered with our operations desk and sent to{' '}
-                    <strong>WhatsApp (+91 98924 47728)</strong>.
+                    <strong>WhatsApp ({BRAND_INFO.phoneDisplay})</strong>.
                   </p>
 
-                  <div className="p-4 bg-[#FFF8EC] rounded-2xl border border-[#E87924]/20 text-xs text-[#28231E]/85 max-w-md mx-auto text-left mb-6 space-y-1.5">
-                    <p className="font-bold text-[#174B35]">✓ Next Immediate Steps:</p>
+                  <div className="p-4 bg-[#FFF9F2] rounded-2xl border border-[#E87924]/20 text-xs text-[#28231E]/85 max-w-md mx-auto text-left mb-6 space-y-1.5">
+                    <p className="font-bold text-[#E87924]">✓ Next Immediate Steps:</p>
                     <p>
-                      Aditya Pushpa Kuttan or an operations partner will connect within 24 hours. To fast-track your priority review immediately, click below to open WhatsApp:
+                      Aditya Kuttan or an operations partner will connect within 24 hours. To fast-track your review immediately, click below to open WhatsApp:
                     </p>
                   </div>
 
@@ -313,49 +324,42 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           contactNumber: '',
                           email: '',
                           city: '',
-                          investmentBudget: '₹4 Lakhs – ₹7 Lakhs (Single Cloud Kitchen Pro)',
+                          investmentBudget: '₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)',
                           timeline: 'Immediately (Within 30 Days)',
                           brand: BRAND_INFO.name,
-                          franchiseType: 'Single Franchisee',
+                          franchiseType: selectedFranchiseType,
                           message: '',
                           consent: false,
                         });
                       }}
-                      className="inline-flex items-center justify-center text-sm font-semibold text-[#174B35] bg-[#F6EBDD] hover:bg-[#FFF8EC] px-6 py-3.5 rounded-xl transition-colors cursor-pointer"
+                      className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl border border-[#28231E]/20 text-xs sm:text-sm font-semibold hover:bg-[#FFF9F2] transition-colors"
                     >
                       Submit Another Query
                     </button>
                   </div>
                 </div>
               ) : (
-                /* Active High-Converting Lead Form */
-                <form onSubmit={handleSubmit} noValidate className="space-y-5 sm:space-y-6">
-                  <div className="border-b border-[#28231E]/8 pb-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-display font-bold text-xl sm:text-2xl text-[#174B35]">
-                        Franchise Investment Enquiry
-                      </h3>
-                      <span className="text-[10px] sm:text-[11px] font-bold text-[#E87924] bg-[#E87924]/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        Direct Desk
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#28231E]/60 mt-1">
-                      Fill out your details to receive the official Franchise Deck & unit economics breakdown.
-                    </p>
+                /* Primary Active Form */
+                <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                  <div className="border-b border-[#28231E]/8 pb-4 mb-2">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[#E87924] block">
+                      Fast-Track Partner Evaluation
+                    </span>
+                    <h3 className="font-display font-black text-xl sm:text-2xl text-[#28231E]">
+                      Submit Your Franchise Enquiry
+                    </h3>
                   </div>
 
                   {submitError && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 text-red-800 text-sm">
-                      <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                      <div>
-                        <strong>Submission Issue:</strong> {submitError}
-                      </div>
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs sm:text-sm text-red-700 flex items-start gap-2.5">
+                      <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                      <span>{submitError}</span>
                     </div>
                   )}
 
-                  {/* Field: Full Name */}
+                  {/* Field 1: Full Name */}
                   <div>
-                    <label htmlFor="fullName" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                    <label htmlFor="fullName" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -366,8 +370,8 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                         setFormData({ ...formData, fullName: e.target.value });
                         if (errors.fullName) setErrors({ ...errors, fullName: undefined });
                       }}
-                      placeholder="e.g. Ramesh Nair"
-                      className={`w-full px-4 py-3 rounded-xl border bg-[#FFF8EC]/40 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
+                      placeholder="e.g. Ramesh Sharma"
+                      className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                         errors.fullName ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                       }`}
                       required
@@ -375,10 +379,10 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     {errors.fullName && <p className="text-xs text-red-600 mt-1 font-medium">{errors.fullName}</p>}
                   </div>
 
-                  {/* Two-Column: Contact & Email */}
+                  {/* Two-Column: Mobile Number & Email Address */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div>
-                      <label htmlFor="contactNumber" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                      <label htmlFor="contactNumber" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -389,8 +393,8 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           setFormData({ ...formData, contactNumber: e.target.value });
                           if (errors.contactNumber) setErrors({ ...errors, contactNumber: undefined });
                         }}
-                        placeholder="e.g. 9892447728"
-                        className={`w-full px-4 py-3 rounded-xl border bg-[#FFF8EC]/40 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
+                        placeholder="e.g. 8484030988"
+                        className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.contactNumber ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
@@ -401,7 +405,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                      <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -413,7 +417,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           if (errors.email) setErrors({ ...errors, email: undefined });
                         }}
                         placeholder="e.g. partner@example.com"
-                        className={`w-full px-4 py-3 rounded-xl border bg-[#FFF8EC]/40 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
+                        className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
@@ -425,7 +429,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                   {/* Two-Column: City & Investment Budget */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div>
-                      <label htmlFor="city" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                      <label htmlFor="city" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                         Preferred City / Location <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -436,8 +440,8 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           setFormData({ ...formData, city: e.target.value });
                           if (errors.city) setErrors({ ...errors, city: undefined });
                         }}
-                        placeholder="e.g. Mumbai, Vasai, Pune, etc."
-                        className={`w-full px-4 py-3 rounded-xl border bg-[#FFF8EC]/40 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
+                        placeholder="e.g. Mumbai, Vasai, Virar, Pune"
+                        className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.city ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
@@ -446,7 +450,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     </div>
 
                     <div>
-                      <label htmlFor="investmentBudget" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                      <label htmlFor="investmentBudget" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                         Investment Budget <span className="text-red-500">*</span>
                       </label>
                       <select
@@ -456,32 +460,38 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           setFormData({ ...formData, investmentBudget: e.target.value });
                           if (errors.investmentBudget) setErrors({ ...errors, investmentBudget: undefined });
                         }}
-                        className="w-full px-4 py-3 rounded-xl border border-[#28231E]/15 bg-[#FFF8EC]/40 text-[#28231E] focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm cursor-pointer"
+                        className="w-full px-4 py-3.5 rounded-xl border border-[#28231E]/15 bg-[#FFF9F2]/50 text-[#28231E] focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm cursor-pointer"
                         required
                       >
-                        <option value="₹4 Lakhs – ₹7 Lakhs (Single Cloud Kitchen Pro)">
-                          ₹4 Lakhs – ₹7 Lakhs (Single Cloud Kitchen)
+                        <option value="₹4 Lakhs (Cloud Kitchen Franchise Fee Only)">
+                          ₹4 Lakhs (Cloud Kitchen Franchise Fee)
                         </option>
-                        <option value="₹7 Lakhs – ₹12 Lakhs (Turnkey Setup with Equipment)">
-                          ₹7 Lakhs – ₹12 Lakhs (Turnkey Setup)
+                        <option value="₹6 Lakhs (Cloud + Dine-In Franchise Fee Only)">
+                          ₹6 Lakhs (Cloud + Dine-In Franchise Fee)
                         </option>
-                        <option value="₹12 Lakhs+ (City / District Master Franchise)">
-                          ₹12 Lakhs+ (City Master Franchise)
+                        <option value="₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)">
+                          ₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen All-In Turnkey)
+                        </option>
+                        <option value="₹13 Lakhs – ₹14 Lakhs (Cloud + Dine-In Turnkey Setup)">
+                          ₹13 Lakhs – ₹14 Lakhs (Cloud + Dine-In Turnkey)
+                        </option>
+                        <option value="₹20 Lakhs – ₹25 Lakhs (City Master Franchise Network)">
+                          ₹20 Lakhs – ₹25 Lakhs (City Master Franchise)
                         </option>
                       </select>
                     </div>
                   </div>
 
-                  {/* Optional Field: Preferred Timeline */}
+                  {/* Preferred Timeline */}
                   <div>
-                    <label htmlFor="timeline" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
+                    <label htmlFor="timeline" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                       Preferred Launch Timeline <span className="text-xs font-normal text-[#28231E]/60">(Optional)</span>
                     </label>
                     <select
                       id="timeline"
                       value={formData.timeline}
                       onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-[#28231E]/15 bg-[#FFF8EC]/40 text-[#28231E] focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm cursor-pointer"
+                      className="w-full px-4 py-3.5 rounded-xl border border-[#28231E]/15 bg-[#FFF9F2]/50 text-[#28231E] focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm cursor-pointer"
                     >
                       <option value="Immediately (Within 30 Days)">Immediately (Within 30 Days)</option>
                       <option value="1 to 3 Months">1 to 3 Months</option>
@@ -489,51 +499,93 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     </select>
                   </div>
 
-                  {/* Franchise Model Selector */}
+                  {/* Franchise Model Preference Selection */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-2">
-                      Franchise Model Preference
+                    <label className="block text-xs sm:text-sm font-bold text-[#28231E] mb-2">
+                      Select Franchise Model Format
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <label
                         className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
-                          formData.franchiseType === 'Single Franchisee'
-                            ? 'border-[#174B35] bg-[#174B35]/5 shadow-xs'
+                          formData.franchiseType === 'Cloud Kitchen' || formData.franchiseType === 'Single Franchisee'
+                            ? 'border-[#E87924] bg-[#FFF3E3] shadow-xs'
                             : 'border-[#28231E]/15 hover:border-[#28231E]/30 bg-white'
                         }`}
                       >
                         <input
                           type="radio"
                           name="franchiseType"
-                          value="Single Franchisee"
-                          checked={formData.franchiseType === 'Single Franchisee'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Single Franchisee' })}
-                          className="mt-1 accent-[#174B35]"
+                          value="Cloud Kitchen"
+                          checked={formData.franchiseType === 'Cloud Kitchen' || formData.franchiseType === 'Single Franchisee'}
+                          onChange={() => setFormData({ ...formData, franchiseType: 'Cloud Kitchen' })}
+                          className="mt-1 accent-[#E87924]"
                         />
                         <div>
-                          <span className="text-sm font-bold text-[#174B35] block">Single Franchisee</span>
-                          <span className="text-[11px] text-[#28231E]/70 block mt-0.5">Kitchen ₹3.99L (All-In ~₹6.49L)</span>
+                          <span className="text-xs sm:text-sm font-bold text-[#28231E] block">Cloud Kitchen (Delivery Only)</span>
+                          <span className="text-[11px] text-[#E87924] font-semibold block mt-0.5">Fee ₹4L · Setup ₹5L–₹6L · 200–250 sq.ft.</span>
                         </div>
                       </label>
 
                       <label
                         className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
-                          formData.franchiseType === 'Master Franchise'
-                            ? 'border-[#174B35] bg-[#174B35]/5 shadow-xs'
+                          formData.franchiseType === 'Cloud Kitchen + Dine-In'
+                            ? 'border-[#E87924] bg-[#FFF3E3] shadow-xs'
                             : 'border-[#28231E]/15 hover:border-[#28231E]/30 bg-white'
                         }`}
                       >
                         <input
                           type="radio"
                           name="franchiseType"
-                          value="Master Franchise"
-                          checked={formData.franchiseType === 'Master Franchise'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Master Franchise' })}
-                          className="mt-1 accent-[#174B35]"
+                          value="Cloud Kitchen + Dine-In"
+                          checked={formData.franchiseType === 'Cloud Kitchen + Dine-In'}
+                          onChange={() => setFormData({ ...formData, franchiseType: 'Cloud Kitchen + Dine-In' })}
+                          className="mt-1 accent-[#E87924]"
                         />
                         <div>
-                          <span className="text-sm font-bold text-[#174B35] block">Master Franchise</span>
-                          <span className="text-[11px] text-[#28231E]/70 block mt-0.5">Territory Rights ₹12.50L</span>
+                          <span className="text-xs sm:text-sm font-bold text-[#28231E] block">Cloud Kitchen + Dine-In</span>
+                          <span className="text-[11px] text-[#E87924] font-semibold block mt-0.5">Fee ₹6L · Setup ₹7L–₹8L · 300–350 sq.ft.</span>
+                        </div>
+                      </label>
+
+                      <label
+                        className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                          formData.franchiseType === 'Master Franchise (Cloud Kitchen)' || formData.franchiseType === 'Master Franchise'
+                            ? 'border-[#E87924] bg-[#FFF3E3] shadow-xs'
+                            : 'border-[#28231E]/15 hover:border-[#28231E]/30 bg-white'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="franchiseType"
+                          value="Master Franchise (Cloud Kitchen)"
+                          checked={formData.franchiseType === 'Master Franchise (Cloud Kitchen)' || formData.franchiseType === 'Master Franchise'}
+                          onChange={() => setFormData({ ...formData, franchiseType: 'Master Franchise (Cloud Kitchen)' })}
+                          className="mt-1 accent-[#E87924]"
+                        />
+                        <div>
+                          <span className="text-xs sm:text-sm font-bold text-[#28231E] block">Master Franchise (Cloud Only)</span>
+                          <span className="text-[11px] text-[#E87924] font-semibold block mt-0.5">Fee ₹20 Lakhs · City Territory Rights</span>
+                        </div>
+                      </label>
+
+                      <label
+                        className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
+                          formData.franchiseType === 'Master Franchise (Cloud + Dine-In)'
+                            ? 'border-[#E87924] bg-[#FFF3E3] shadow-xs'
+                            : 'border-[#28231E]/15 hover:border-[#28231E]/30 bg-white'
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="franchiseType"
+                          value="Master Franchise (Cloud + Dine-In)"
+                          checked={formData.franchiseType === 'Master Franchise (Cloud + Dine-In)'}
+                          onChange={() => setFormData({ ...formData, franchiseType: 'Master Franchise (Cloud + Dine-In)' })}
+                          className="mt-1 accent-[#E87924]"
+                        />
+                        <div>
+                          <span className="text-xs sm:text-sm font-bold text-[#28231E] block">Master Franchise (Cloud + Dine-In)</span>
+                          <span className="text-[11px] text-[#E87924] font-semibold block mt-0.5">Fee ₹25 Lakhs · Full Metro Rights</span>
                         </div>
                       </label>
                     </div>
@@ -541,22 +593,22 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
 
                   {/* Optional Message */}
                   <div>
-                    <label htmlFor="message" className="block text-xs sm:text-sm font-semibold text-[#28231E] mb-1.5">
-                      Additional Background or Specific Questions <span className="text-xs font-normal text-[#28231E]/60">(Optional)</span>
+                    <label htmlFor="message" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
+                      Additional Notes / Experience <span className="text-xs font-normal text-[#28231E]/60">(Optional)</span>
                     </label>
                     <textarea
                       id="message"
-                      rows={2}
+                      rows={3}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="e.g. Existing kitchen space available, experience in food delivery, target neighborhood..."
-                      className="w-full px-4 py-2.5 rounded-xl border border-[#28231E]/15 bg-[#FFF8EC]/40 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm resize-y"
+                      placeholder="Share your background, target catchment or questions..."
+                      className="w-full px-4 py-3 rounded-xl border border-[#28231E]/15 bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm resize-none"
                     />
                   </div>
 
-                  {/* Consent Checkbox */}
-                  <div>
-                    <label className="flex items-start gap-3 cursor-pointer select-none">
+                  {/* Explicit Consent Checkbox */}
+                  <div className="pt-1">
+                    <label className="flex items-start gap-2.5 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={formData.consent}
@@ -564,50 +616,38 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           setFormData({ ...formData, consent: e.target.checked });
                           if (errors.consent) setErrors({ ...errors, consent: undefined });
                         }}
-                        className="mt-1 w-4 h-4 rounded text-[#E87924] accent-[#E87924] focus:ring-[#E87924]"
+                        className="mt-1 w-4 h-4 rounded text-[#E87924] accent-[#E87924] focus:ring-[#E87924] cursor-pointer"
+                        required
                       />
-                      <span className="text-xs text-[#28231E]/80 leading-snug">
-                        I agree to be contacted by Mom&apos;s Cloud Kitchen via call, WhatsApp, or email regarding my franchise enquiry. Information is strictly confidential. <span className="text-red-500">*</span>
+                      <span className="text-xs text-[#28231E]/75 leading-relaxed">
+                        I agree to be contacted by Mom&apos;s Cloud Kitchen regarding franchise details, financial unit economics, and launch guidelines via Phone, WhatsApp or Email.{' '}
+                        <span className="text-red-500">*</span>
                       </span>
                     </label>
                     {errors.consent && <p className="text-xs text-red-600 mt-1 font-medium">{errors.consent}</p>}
                   </div>
 
                   {/* Submit Button */}
-                  <div className="space-y-3 pt-2">
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-4 px-6 bg-[#E87924] hover:bg-[#D16719] active:bg-[#B95732] disabled:bg-[#E87924]/60 text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E87924]"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          <span>Submitting Your Enquiry...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Submit Franchise Enquiry</span>
-                          <Send className="w-4 h-4" />
-                        </>
-                      )}
-                    </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 px-6 rounded-xl font-black text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white shadow-xl hover:shadow-[#E87924]/40 transition-all duration-200 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Transmitting Application...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Submit Franchise Enquiry</span>
+                        <Send className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
 
-                    <a
-                      href={`https://wa.me/919892447728?text=${encodeURIComponent(
-                        "Hello Aditya, I am interested in Mom's Cloud Kitchen franchise opportunity. Please share the details."
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-3 px-6 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] font-bold text-xs sm:text-sm rounded-xl transition-colors flex items-center justify-center gap-2 border border-[#25D366]/30 cursor-pointer"
-                    >
-                      <MessageSquare className="w-4 h-4 text-[#25D366]" />
-                      <span>Prefer WhatsApp? Connect Directly (+91 98924 47728)</span>
-                    </a>
-                  </div>
-
-                  <p className="text-[11px] text-center text-[#28231E]/60">
-                    Lead routed to founder Aditya Pushpa Kuttan with secure backup to <strong>{BRAND_INFO.email}</strong>.
+                  <p className="text-[11px] text-center text-[#28231E]/60 pt-1">
+                    🔒 Zero spam guarantee. Leads forwarded immediately to Founder Aditya Kuttan ({BRAND_INFO.phoneDisplay}).
                   </p>
                 </form>
               )}

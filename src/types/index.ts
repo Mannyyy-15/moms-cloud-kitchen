@@ -1,4 +1,10 @@
-export type FranchiseType = 'Single Franchisee' | 'Master Franchise';
+export type FranchiseType =
+  | 'Cloud Kitchen'
+  | 'Cloud Kitchen + Dine-In'
+  | 'Master Franchise (Cloud Kitchen)'
+  | 'Master Franchise (Cloud + Dine-In)'
+  | 'Single Franchisee'
+  | 'Master Franchise';
 
 export interface UtmParams {
   utm_source?: string;
@@ -57,4 +63,20 @@ export interface StepItem {
   subtitle: string;
   description: string;
   badge: string;
+}
+
+export interface WomenEmpowermentStory {
+  title: string;
+  quote: string;
+  vision: string;
+  mission: string;
+  images: {
+    src: string;
+    caption: string;
+    alt: string;
+  }[];
+  pillars: {
+    title: string;
+    description: string;
+  }[];
 }

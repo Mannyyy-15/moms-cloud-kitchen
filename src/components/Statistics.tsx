@@ -44,7 +44,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ value }) => {
       const frame = (time: number) => {
         if (!startTime) startTime = time;
         const progress = Math.min((time - startTime) / duration, 1);
-        // Exponential ease-out
         const easeOut = 1 - Math.pow(1 - progress, 4);
         const current = Math.floor(end * easeOut);
         setDisplayValue(current.toLocaleString('en-IN') + '+');
@@ -75,14 +74,14 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ value }) => {
       return;
     }
 
-    // Case 3: "4–6 Mos"
-    if (value.includes('4') && value.includes('6') && value.includes('Mos')) {
+    // Case 3: "6–8 Mos"
+    if (value.includes('6') && value.includes('8') && value.includes('Mos')) {
       const frame = (time: number) => {
         if (!startTime) startTime = time;
         const progress = Math.min((time - startTime) / duration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 4);
-        const v1 = Math.floor(4 * easeOut);
-        const v2 = Math.floor(6 * easeOut);
+        const v1 = Math.floor(6 * easeOut);
+        const v2 = Math.floor(8 * easeOut);
         setDisplayValue(`${v1}–${v2} Mos`);
 
         if (progress < 1) {
@@ -140,37 +139,37 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ value }) => {
 
 export const Statistics: React.FC = () => {
   return (
-    <section className="bg-[#F6EBDD] py-12 sm:py-16 lg:py-20 border-b border-[#28231E]/8 overflow-hidden">
+    <section className="bg-[#FFF3E3] py-12 sm:py-16 lg:py-20 border-b border-[#E87924]/20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollReveal direction="up" className="text-center max-w-xl mx-auto mb-12">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#E87924] block mb-2">
+        <ScrollReveal direction="up" className="text-center max-w-xl mx-auto mb-10 sm:mb-12">
+          <span className="text-xs font-black uppercase tracking-[0.25em] text-[#E87924] block mb-2">
             Verified Milestones
           </span>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#174B35]">
-            Built On Real Customer Trust & Consistent Quality
+          <h2 className="font-display font-black text-2xl sm:text-3xl text-[#28231E]">
+            Built On Real Customer Trust &amp; Consistent Quality
           </h2>
         </ScrollReveal>
 
         {/* 4-Column Statistics Row with Animated Counters */}
         <StaggerContainer
           staggerDelay={0.12}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10"
         >
           {STATS_DATA.map((item, index) => (
             <StaggerItem
               key={index}
-              className={`flex flex-col items-center text-center p-3 sm:p-4 lg:p-6 rounded-2xl bg-white/40 lg:bg-transparent border border-[#28231E]/6 lg:border-none transition-all duration-300 hover:bg-white/70 lg:hover:bg-transparent ${
-                index < 3 ? 'lg:border-r lg:border-[#28231E]/12' : ''
+              className={`flex flex-col items-center text-center p-4 lg:p-6 rounded-2xl bg-white/70 lg:bg-transparent border border-[#E87924]/20 lg:border-none transition-all duration-300 hover:bg-white lg:hover:bg-transparent ${
+                index < 3 ? 'lg:border-r lg:border-[#E87924]/20' : ''
               }`}
             >
-              <div className="font-display font-black text-3xl sm:text-4xl lg:text-6xl text-[#174B35] tracking-tight tabular-nums mb-2">
+              <div className="font-display font-black text-3xl sm:text-4xl lg:text-6xl text-[#E87924] tracking-tight tabular-nums mb-2">
                 <AnimatedCounter value={item.value} />
               </div>
               <div className="text-sm sm:text-base lg:text-lg font-bold text-[#28231E] mb-1">
                 {item.label}
               </div>
-              <p className="text-xs sm:text-sm text-[#28231E]/70 max-w-[200px] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#28231E]/75 max-w-[210px] leading-relaxed">
                 {item.detail}
               </p>
             </StaggerItem>
