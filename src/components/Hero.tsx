@@ -14,21 +14,21 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#1E0F08] select-none"
+      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#E66E10] select-none"
     >
-      {/* 1. Full-bleed Background: Traditional South Indian Feast Spread */}
+      {/* 1. Full-bleed Background: Official Mom's Cloud Kitchen Hero Banner */}
       <div className="absolute inset-0 z-0">
         <img
           src={BRAND_INFO.images.hero}
-          alt="Mom's Cloud Kitchen authentic South Indian feast with golden masala dosa, idli, vada, chutneys and sambar on banana leaf"
+          alt="Mom's Cloud Kitchen official hero banner with mother mascot, Made By Mom Loved By All, golden masala dosa, idli, and chutneys"
           className="w-full h-full object-cover object-center scale-[1.01] transition-transform duration-1000 ease-out"
           referrerPolicy="no-referrer"
           fetchPriority="high"
         />
 
-        {/* Minimal subtle scrims to preserve vibrant food photography while ensuring readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/60 pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-64 sm:h-72 bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-none" />
+        {/* Minimal scrims to protect navbar readability and give crisp contrast to bottom CTAs while preserving vibrant saffron artwork */}
+        <div className="absolute inset-x-0 top-0 h-32 sm:h-40 bg-gradient-to-b from-black/45 via-black/15 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-56 sm:h-64 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none" />
       </div>
 
       {/* Top spacer for the floating navigation bar */}

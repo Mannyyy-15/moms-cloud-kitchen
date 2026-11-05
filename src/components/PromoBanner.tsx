@@ -13,6 +13,15 @@ export const PromoBanner: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up">
           <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#C25E00] via-[#E87924] to-[#F59E0B] p-6 sm:p-10 lg:p-12 text-white shadow-xl">
+            {/* Ambient background brand banner overlay */}
+            <div className="absolute inset-0 z-0 opacity-25 mix-blend-luminosity pointer-events-none">
+              <img
+                src="/images/hero_banner_custom.jpg"
+                alt="Mom's Cloud Kitchen Official Banner"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
             {/* Ambient background rings */}
             <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 rounded-full bg-white/10 blur-xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 rounded-full bg-black/10 blur-xl pointer-events-none" />
