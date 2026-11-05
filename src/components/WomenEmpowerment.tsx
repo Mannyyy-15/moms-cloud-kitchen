@@ -143,3 +143,4 @@ export const WomenEmpowerment: React.FC = () => {
     </section>
   );
 };
+

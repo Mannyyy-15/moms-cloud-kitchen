@@ -56,3 +56,4 @@ export const PromoBanner: React.FC = () => {
     </section>
   );
 };
+
