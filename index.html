@@ -68,13 +68,26 @@
     <link rel="icon" type="image/webp" href="/logo.webp" />
     <link rel="apple-touch-icon" href="/logo.webp" />
 
-    <!-- Google Fonts: Anton (Heavy Display), Outfit (Display), Plus Jakarta Sans (Body), Fraunces (Editorial Accent) -->
+    <!-- Core Web Vitals: Preload High-Priority LCP Hero Banner & Fonts -->
+    <link rel="preload" as="image" href="/images/hero_banner_custom.jpg" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Speculation Rules for Instant Navigation & Zero Latency -->
+    <script type="speculationrules">
+    {
+      "prerender": [
+        {
+          "source": "list",
+          "urls": ["/"]
+        }
+      ]
+    }
+    </script>
 
     <!-- Structured Data (JSON-LD) for Google Rich Snippets & Answer Engine Optimization (AEO) -->
     <script type="application/ld+json">
@@ -173,7 +186,70 @@
     </script>
   </head>
   <body class="bg-[#FFF9F2] text-[#28231E] font-sans antialiased selection:bg-[#E87924] selection:text-white min-h-screen">
-    <div id="root"></div>
+    <div id="root">
+      <!-- Semantic SEO & Generative Engine Pre-Render Fallback (Crawled by Non-JS AI Bots & Search Spiders) -->
+      <header>
+        <nav aria-label="Main Navigation">
+          <a href="/">Mom's Cloud Kitchen – Made By Mom Loved By All</a>
+          <a href="#story">About Founder</a>
+          <a href="#franchise-models">Franchise Models</a>
+          <a href="#women-empowerment">Women Empowerment</a>
+          <a href="#faq">FAQs</a>
+          <a href="#franchise-enquiry">Enquire Now</a>
+        </nav>
+      </header>
+      <main>
+        <article>
+          <h1>Mom's Cloud Kitchen – Pure Veg Food & Franchise Opportunities</h1>
+          <p><strong>Tagline:</strong> Made By Mom Loved By All</p>
+          <p>Authentic 100% pure vegetarian home-style food brand with over 4,000+ orders delivered across Vasai-Virar, Maharashtra. Low-capex, high-profit cloud kitchen and dine-in franchise models with proven ROI in 6 to 8 months.</p>
+          
+          <section id="story-prerender">
+            <h2>Slum to an Entrepreneur – Founder Journey</h2>
+            <p>Every great journey begins with a dream. Aditya Kuttan grew up in a slum in Colaba, Mumbai with limited resources but unlimited dreams. Starting as a Housekeeping Associate at Café Coffee Day, he worked his way up over 20 years in hospitality across India, the UAE, Oman, and Qatar to become Head of Operations.</p>
+            <p>Three years ago, he founded Mom's Cloud Kitchen from Virar, Maharashtra, delivering over 4,000+ orders with authentic home-style flavors and pure-veg quality.</p>
+            <blockquote>"I started my career cleaning floors in a coffee shop. Today, I dream of building a food brand that reaches thousands of homes. The journey is proof that your background doesn't decide your future — your determination does." — Aditya Kuttan, Founder</blockquote>
+          </section>
+
+          <section id="models-prerender">
+            <h2>Franchise Models & Investment</h2>
+            <h3>1. Cloud Kitchen Pro (Delivery Only)</h3>
+            <ul>
+              <li>Franchise Fee: ₹4,00,000 (5-year tenure)</li>
+              <li>Setup Cost: ₹5,00,000 to ₹6,00,000</li>
+              <li>Area Required: 200 to 250 sq. ft.</li>
+              <li>Royalty: Flat 5% on monthly net sales</li>
+              <li>Expected ROI: 6 to 8 months</li>
+            </ul>
+            <h3>2. Cloud Kitchen Plus Dine-In Restaurant</h3>
+            <ul>
+              <li>Franchise Fee: ₹6,00,000 (5-year tenure)</li>
+              <li>Setup Cost: ₹7,00,000 to ₹8,00,000</li>
+              <li>Area Required: 300 to 350 sq. ft.</li>
+              <li>Royalty: Flat 5% on monthly net sales</li>
+              <li>Expected ROI: 6 to 8 months</li>
+            </ul>
+            <h3>3. City Master Franchise</h3>
+            <p>Cloud Kitchen Master: ₹20 Lakh | Cloud + Dine-In Master: ₹25 Lakh (Tenure: 5 years, Royalty: 5% flat).</p>
+          </section>
+
+          <section id="empowerment-prerender">
+            <h2>Women Empowerment Initiative</h2>
+            <p><strong>EMPOWERING WOMEN, TRANSFORMING LIVES.</strong> We cook with love, we grow together — empowering women, one opportunity at a time.</p>
+            <blockquote>"Some people cook to earn a living, We want to give them a platform where cooking becomes their strength, their identity and their path to independence."</blockquote>
+            <p><strong>Vision:</strong> Our vision is not just to build a successful food brand, but to build a community where women get the opportunity to transform their lives through employment, skills and financial independence.</p>
+          </section>
+
+          <section id="contact-prerender">
+            <h2>Contact & Franchise Enquiry</h2>
+            <p>Founder: Aditya Kuttan</p>
+            <p>Phone / WhatsApp: +91 84840 30988</p>
+            <p>Email: aditya@momscloudkitchen.com</p>
+            <p>Instagram: @moms.cloud.kitchen.mumbai (https://www.instagram.com/moms.cloud.kitchen.mumbai)</p>
+          </section>
+        </article>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
