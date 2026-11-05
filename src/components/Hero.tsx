@@ -14,21 +14,31 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#E66E10] select-none"
+      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#E87924] select-none"
     >
-      {/* 1. Full-bleed Background: Official Mom's Cloud Kitchen Hero Banner */}
+      {/* 1. Full-bleed Background: Responsive Ultra-HD Hero Banners (Mobile 9:16 & Desktop 16:9) */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={BRAND_INFO.images.hero}
-          alt="Mom's Cloud Kitchen official hero banner with mother mascot, Made By Mom Loved By All, golden masala dosa, idli, and chutneys"
-          className="w-full h-full object-cover object-center scale-[1.01] transition-transform duration-1000 ease-out"
-          referrerPolicy="no-referrer"
-          fetchPriority="high"
-        />
+        <picture className="w-full h-full block">
+          <source
+            media="(max-width: 768px)"
+            srcSet="/images/hero_banner_mobile.jpg"
+          />
+          <source
+            media="(min-width: 769px)"
+            srcSet="/images/hero_banner_desktop.jpg"
+          />
+          <img
+            src="/images/hero_banner_desktop.jpg"
+            alt="Mom's Cloud Kitchen official hero banner with mother mascot, Made By Mom Loved By All, golden masala dosa, idli, and chutneys"
+            className="w-full h-full object-cover object-center scale-[1.01] transition-transform duration-1000 ease-out"
+            referrerPolicy="no-referrer"
+            fetchPriority="high"
+          />
+        </picture>
 
         {/* Minimal scrims to protect navbar readability and give crisp contrast to bottom CTAs while preserving vibrant saffron artwork */}
-        <div className="absolute inset-x-0 top-0 h-32 sm:h-40 bg-gradient-to-b from-black/45 via-black/15 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-56 sm:h-64 bg-gradient-to-t from-black/85 via-black/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-48 sm:h-56 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
       </div>
 
       {/* Top spacer for the floating navigation bar */}

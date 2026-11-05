@@ -68,8 +68,9 @@
     <link rel="icon" type="image/webp" href="/logo.webp" />
     <link rel="apple-touch-icon" href="/logo.webp" />
 
-    <!-- Core Web Vitals: Preload High-Priority LCP Hero Banner & Fonts -->
-    <link rel="preload" as="image" href="/images/hero_banner_custom.jpg" fetchpriority="high" />
+    <!-- Core Web Vitals: Responsive Preload of High-Priority LCP Hero Banners -->
+    <link rel="preload" as="image" href="/images/hero_banner_mobile.jpg" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/images/hero_banner_desktop.jpg" media="(min-width: 769px)" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
