@@ -89,24 +89,24 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-[100vw] overflow-hidden leading-none text-center flex justify-center items-center"
         >
-          <h1 className="w-full max-w-[100vw] select-none block m-0 p-0 leading-none" aria-label="Mom's Kitchen">
+          <h1 className="w-full max-w-[100vw] select-none block m-0 p-0 leading-none" aria-label="Mom's Cloud Kitchen">
             <svg
-              viewBox="0 0 1000 125"
+              viewBox="0 0 1400 125"
               className="w-full h-auto block select-none pointer-events-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
               preserveAspectRatio="xMidYMid meet"
             >
               <text
-                x="500"
-                y="108"
+                x="700"
+                y="105"
                 textAnchor="middle"
                 fill="#FFFFFF"
                 fontWeight="900"
-                fontSize="124"
+                fontSize="120"
                 fontFamily="Anton, Impact, 'Outfit', sans-serif"
-                textLength="980"
+                textLength="1360"
                 lengthAdjust="spacingAndGlyphs"
               >
-                MOM'S KITCHEN
+                MOM'S CLOUD KITCHEN
               </text>
             </svg>
           </h1>

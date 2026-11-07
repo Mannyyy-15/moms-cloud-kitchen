@@ -391,7 +391,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "The South Indian Lunch",
         description: "Country vegetables, yellow lentils and short-grain rice cooked to perfection with freshly ground spices and desi ghee.",
         price: "₹299",
-        image: "/images/hero_south_indian_dosa_idli_1793815300389.jpg",
+        image: "/images/dish_classic_sambar_rice.jpg",
         tag: "Bestseller Lunch"
       },
       {
