@@ -37,18 +37,30 @@ export const Navbar: React.FC<NavbarProps> = () => {
     { label: 'Founder Story', href: '#story' },
     { label: 'Women Empowerment', href: '#women-empowerment' },
     { label: 'Franchise Models', href: '#franchise-models' },
-    { label: 'Signature Menu', href: '#food' },
+    { label: 'Signature Menu', href: '#menu' },
     { label: 'Unit Economics', href: '#roi-calculator' },
     { label: 'FAQ', href: '#faq' },
   ];
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.body.style.overflow = 'unset';
+
+    setTimeout(() => {
+      // Support aliases (#food or #menu)
+      const targetId = href === '#food' ? '#menu' : href;
+      const element = document.querySelector(targetId);
+      if (element) {
+        const navOffset = 88;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
+    }, 60);
   };
 
   return (

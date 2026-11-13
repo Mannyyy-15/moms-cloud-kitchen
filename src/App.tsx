@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { QuickNav } from './components/QuickNav';
 import { BrandStory } from './components/BrandStory';
 import { Statistics } from './components/Statistics';
 import { PromoBanner } from './components/PromoBanner';
@@ -62,6 +63,9 @@ export default function App() {
       <main className="flex-grow">
         {/* B. Hero Section: Meta Ads Traffic Optimized */}
         <Hero />
+
+        {/* Fast-Track Quick Navigation for Mobile & Desktop */}
+        <QuickNav />
 
         {/* C. Trust & Brand Introduction: Story, Founder & Authentic Roots */}
         <BrandStory />

@@ -1,20 +1,13 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
-import { BRAND_INFO } from '../data/brandData';
 
 export const Hero: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
 
-  const scrollTo = (id: string) => {
-    const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#E87924] select-none"
+      className="relative min-h-[85vh] sm:min-h-screen w-full flex flex-col justify-end overflow-hidden bg-[#E87924] select-none"
     >
       {/* 1. Full-bleed Background: Responsive Ultra-HD Hero Banners (Mobile 9:16 & Desktop 16:9) */}
       <div className="absolute inset-0 z-0">
@@ -36,63 +29,23 @@ export const Hero: React.FC = () => {
           />
         </picture>
 
-        {/* Minimal scrims to protect navbar readability and give crisp contrast to bottom CTAs while preserving vibrant saffron artwork */}
-        <div className="absolute inset-x-0 top-0 h-28 sm:h-36 bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-48 sm:h-56 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
+        {/* Subtle, soft scrims that keep the banner mascot artwork 100% visible and unblocked */}
+        <div className="absolute inset-x-0 top-0 h-24 sm:h-28 bg-gradient-to-b from-black/35 via-black/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-24 sm:h-32 bg-gradient-to-t from-black/55 via-black/15 to-transparent pointer-events-none" />
       </div>
 
-      {/* Top spacer for the floating navigation bar */}
-      <div className="pt-24 sm:pt-32" />
-
-      {/* 2. Bottom Content Container: Centered Action Buttons + 100vw Full-Width MOM'S KITCHEN Text */}
-      <div className="relative z-10 w-full flex flex-col items-center justify-end text-center mt-auto pb-0 px-0">
-        {/* Centered Action Buttons & 100% Pure Veg Trust Tag directly above text */}
+      {/* 2. Streamlined Brand Headline: Compact, perfectly proportioned along bottom baseline without hiding mascot logo */}
+      <div className="relative z-10 w-full flex flex-col items-center justify-end text-center pb-2.5 sm:pb-4 px-4 sm:px-6">
         <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 15 }}
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center gap-3 sm:gap-4 mb-3 sm:mb-5 px-4"
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl lg:max-w-4xl overflow-hidden leading-none text-center flex justify-center items-center"
         >
-          {/* 100% Pure Vegetarian Trust Pill */}
-          <div className="inline-flex items-center gap-2 bg-black/65 border border-emerald-500/70 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-black text-emerald-300 uppercase tracking-widest shadow-xl">
-            <span className="w-3.5 h-3.5 border-2 border-emerald-400 p-[2px] flex items-center justify-center rounded-sm shrink-0">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
-            </span>
-            <span>100% Pure Vegetarian Kitchen</span>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            {/* Primary Action Button */}
-            <button
-              onClick={() => scrollTo('#franchise-enquiry')}
-              className="inline-flex items-center gap-2 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl shadow-2xl hover:shadow-[#E87924]/40 transition-all duration-200 cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              <span>Explore Franchise</span>
-              <ArrowUpRight className="w-4 h-4 text-white" />
-            </button>
-
-            {/* Secondary Action Button */}
-            <button
-              onClick={() => scrollTo('#story')}
-              className="inline-flex items-center gap-2 bg-black/40 hover:bg-black/60 active:scale-[0.98] text-white font-bold text-xs sm:text-sm uppercase tracking-wider px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl border border-white/50 hover:border-white transition-all duration-200 backdrop-blur-md cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              <span>Discover Our Story</span>
-              <ArrowUpRight className="w-4 h-4 text-white/90" />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* 3. Massive Headline: Sized to fit 100% of viewport width (100vw) across all devices perfectly */}
-        <motion.div
-          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-[100vw] overflow-hidden leading-none text-center flex justify-center items-center"
-        >
-          <h1 className="w-full max-w-[100vw] select-none block m-0 p-0 leading-none" aria-label="Mom's Cloud Kitchen">
+          <h1 className="w-full select-none block m-0 p-0 leading-none" aria-label="Mom's Cloud Kitchen">
             <svg
               viewBox="0 0 1400 125"
-              className="w-full h-auto block select-none pointer-events-none drop-shadow-[0_12px_28px_rgba(0,0,0,0.85)]"
+              className="w-full h-auto block select-none pointer-events-none drop-shadow-[0_8px_20px_rgba(0,0,0,0.8)]"
               preserveAspectRatio="xMidYMid meet"
             >
               <text

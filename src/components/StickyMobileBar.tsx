@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageSquare, ArrowRight } from 'lucide-react';
+import { Phone, MessageSquare, ArrowDown, Sparkles } from 'lucide-react';
 import { BRAND_INFO } from '../data/brandData';
 
 export const StickyMobileBar: React.FC = () => {
@@ -7,18 +7,17 @@ export const StickyMobileBar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show only after scrolling down 300px
       const formEl = document.querySelector('#franchise-enquiry');
       if (!formEl) {
-        setIsVisible(window.scrollY > 300);
+        setIsVisible(window.scrollY > 60);
         return;
       }
 
       const rect = formEl.getBoundingClientRect();
-      const isFormInView = rect.top < window.innerHeight && rect.bottom > 0;
+      const isFormInView = rect.top < window.innerHeight && rect.bottom > 80;
 
-      // Hide if user is already typing in the form or scrolled to top
-      if (isFormInView || window.scrollY < 300) {
+      // Show as soon as user starts scrolling down (>60px), hide only when form is in active view
+      if (isFormInView || window.scrollY <= 60) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -26,29 +25,38 @@ export const StickyMobileBar: React.FC = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToForm = () => {
     const el = document.querySelector('#franchise-enquiry');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      const navOffset = 70;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth',
+      });
+    }
   };
 
   if (!isVisible) return null;
 
   return (
     <aside 
-      aria-label="Mobile Enquiry Bar"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t-2 border-[#E87924]/20 p-3 shadow-[0_-8px_20px_rgba(0,0,0,0.12)] animate-in slide-in-from-bottom duration-300"
+      aria-label="Mobile Quick Enquiry Bar"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFF9F2]/95 backdrop-blur-xl border-t border-[#E87924]/30 px-3 py-2.5 shadow-[0_-8px_25px_rgba(0,0,0,0.18)] animate-in slide-in-from-bottom duration-200"
     >
       <div className="flex items-center gap-2 max-w-md mx-auto">
         {/* Quick Call */}
         <a
           href={`tel:${BRAND_INFO.phoneClean}`}
-          className="w-11 h-11 rounded-xl bg-[#FFF3E3] border border-[#E87924]/30 flex items-center justify-center text-[#E87924] shrink-0 active:scale-95 transition-transform"
-          aria-label="Call Mom's Cloud Kitchen Founder"
+          className="w-10 h-10 rounded-xl bg-white border border-[#E87924]/30 flex items-center justify-center text-[#E87924] shrink-0 active:scale-95 transition-transform shadow-xs"
+          aria-label="Call Founder Desk"
         >
-          <Phone className="w-5 h-5" />
+          <Phone className="w-4 h-4" />
         </a>
 
         {/* Quick WhatsApp */}
@@ -56,19 +64,20 @@ export const StickyMobileBar: React.FC = () => {
           href={BRAND_INFO.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-11 h-11 rounded-xl bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center text-[#128C7E] shrink-0 active:scale-95 transition-transform"
-          aria-label="WhatsApp Mom's Cloud Kitchen Founder"
+          className="w-10 h-10 rounded-xl bg-[#25D366]/15 border border-[#25D366]/40 flex items-center justify-center text-[#128C7E] shrink-0 active:scale-95 transition-transform shadow-xs"
+          aria-label="WhatsApp Founder Desk"
         >
-          <MessageSquare className="w-5 h-5" />
+          <MessageSquare className="w-4 h-4 fill-[#25D366]" />
         </a>
 
-        {/* Primary CTA: Enquire Now */}
+        {/* Primary CTA: Jump Straight to Franchise Application Form */}
         <button
           onClick={scrollToForm}
-          className="flex-grow py-3 px-4 bg-[#E87924] hover:bg-[#D16719] active:scale-[0.98] text-white font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+          className="flex-grow py-2.5 px-3 bg-gradient-to-r from-[#E87924] to-[#D16719] hover:brightness-105 active:scale-[0.98] text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
         >
-          <span>Enquire for Franchise</span>
-          <ArrowRight className="w-4 h-4" />
+          <Sparkles className="w-3.5 h-3.5 text-amber-200 shrink-0" />
+          <span className="truncate">Apply for Franchise</span>
+          <ArrowDown className="w-3.5 h-3.5 shrink-0" />
         </button>
       </div>
     </aside>

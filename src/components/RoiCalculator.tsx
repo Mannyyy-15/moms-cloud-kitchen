@@ -45,7 +45,7 @@ export const RoiCalculator: React.FC = () => {
   };
 
   return (
-    <section id="roi-calculator" className="py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
+    <section id="roi-calculator" className="scroll-mt-24 py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 mb-3 justify-center">

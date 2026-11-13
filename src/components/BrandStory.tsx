@@ -31,7 +31,7 @@ export const BrandStory: React.FC = () => {
   ];
 
   return (
-    <section id="story" className="pt-14 pb-12 sm:pt-18 sm:pb-16 lg:pt-24 lg:pb-20 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
+    <section id="story" className="scroll-mt-24 pt-14 pb-12 sm:pt-18 sm:pb-16 lg:pt-24 lg:pb-20 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mb-10 sm:mb-14">

@@ -178,7 +178,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
   };
 
   return (
-    <section id="franchise-enquiry" className="py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15">
+    <section id="franchise-enquiry" className="scroll-mt-24 py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left Column: Trust, Guidance & Direct Contact Channels */}

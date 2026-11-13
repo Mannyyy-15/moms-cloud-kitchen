@@ -17,7 +17,7 @@ export const FranchiseModels: React.FC<FranchiseModelsProps> = ({ onSelectModel 
     : FRANCHISE_MODELS.filter(m => m.track === 'City Master Franchise');
 
   return (
-    <section id="franchise-models" className="py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15">
+    <section id="franchise-models" className="scroll-mt-24 py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <ScrollReveal direction="up" className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">

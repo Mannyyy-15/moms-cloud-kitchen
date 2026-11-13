@@ -6,17 +6,32 @@ import { ScrollReveal } from './ScrollReveal';
 
 export const FoodShowcase: React.FC = () => {
   const [activeCategoryId, setActiveCategoryId] = useState<string>(MENU_CATEGORIES[0].id);
+  const [showAllMobile, setShowAllMobile] = useState<boolean>(false);
 
   const activeCategory =
     MENU_CATEGORIES.find((cat) => cat.id === activeCategoryId) || MENU_CATEGORIES[0];
 
+  const handleCategoryChange = (id: string) => {
+    setActiveCategoryId(id);
+    setShowAllMobile(false);
+  };
+
   const scrollTo = (id: string) => {
     const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      const navOffset = 88;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth',
+      });
+    }
   };
 
   return (
-    <section id="menu" className="py-16 sm:py-24 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
+    <section id="menu" className="scroll-mt-24 py-16 sm:py-24 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
+      <div id="food" className="scroll-mt-24" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Editorial Section Header */}
         <ScrollReveal direction="up" className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-14">
@@ -58,7 +73,7 @@ export const FoodShowcase: React.FC = () => {
               return (
                 <button
                   key={category.id}
-                  onClick={() => setActiveCategoryId(category.id)}
+                  onClick={() => handleCategoryChange(category.id)}
                   className={`relative px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 whitespace-nowrap cursor-pointer shrink-0 snap-start select-none ${
                     isActive
                       ? 'text-white shadow-md'
@@ -112,7 +127,9 @@ export const FoodShowcase: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="bg-white rounded-3xl overflow-hidden border border-[#E87924]/20 shadow-sm hover:shadow-xl hover:border-[#E87924] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+                className={`bg-white rounded-3xl overflow-hidden border border-[#E87924]/20 shadow-sm hover:shadow-xl hover:border-[#E87924] transition-all duration-300 justify-between group hover:-translate-y-1 ${
+                  index >= 4 && !showAllMobile ? 'hidden sm:flex flex-col' : 'flex flex-col'
+                }`}
               >
                 <div>
                   {/* Dish Image Container */}
@@ -124,7 +141,7 @@ export const FoodShowcase: React.FC = () => {
                       loading="lazy"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/images/dish_plain_dosa.jpeg';
+                        target.src = '/images/dish_plain_dosa.jpg';
                       }}
                     />
 
@@ -183,6 +200,19 @@ export const FoodShowcase: React.FC = () => {
             ))}
           </motion.div>
         </AnimatePresence>
+
+        {/* Mobile View All Toggle to Reduce Scroll Distance */}
+        {activeCategory.items.length > 4 && (
+          <div className="sm:hidden mt-6 text-center">
+            <button
+              onClick={() => setShowAllMobile(!showAllMobile)}
+              className="inline-flex items-center gap-2 bg-white border border-[#E87924]/30 text-[#E87924] font-black text-xs uppercase tracking-wider px-6 py-2.5 rounded-full shadow-xs active:scale-95 transition-all"
+            >
+              <span>{showAllMobile ? 'Show Less' : `View All ${activeCategory.items.length} Dishes`}</span>
+              <ArrowRight className={`w-3.5 h-3.5 transition-transform ${showAllMobile ? '-rotate-90' : 'rotate-90'}`} />
+            </button>
+          </div>
+        )}
 
         {/* Editorial Note for Franchisees */}
         <div className="mt-12 text-center p-6 bg-white rounded-2xl border border-[#E87924]/20 max-w-2xl mx-auto shadow-xs">

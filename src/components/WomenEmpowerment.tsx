@@ -78,7 +78,7 @@ export const WomenEmpowerment: React.FC = () => {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {WOMEN_EMPOWERMENT_DATA.images.map((img, idx) => (
               <div
                 key={idx}

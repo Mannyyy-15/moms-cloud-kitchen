@@ -27,10 +27,10 @@ export const BRAND_INFO = {
     founderBackup: "/images/founder_aditya_pushpa_kuttan_2.webp",
     momCooking: "/images/kitchen_mom_cooking_1793814074228.jpg",
     southIndian: "/images/food_south_indian_thali_1793814074632.jpg",
-    breakfast: "/images/dish_masala_dosa.jpeg",
+    breakfast: "/images/dish_masala_dosa.jpg",
     shravan: "/images/dish_sabudana_khichdi.jpeg",
-    protein: "/images/dish_ragi_masala_dosa.jpeg",
-    sweet: "/images/dish_chocolate_dosa.jpeg",
+    protein: "/images/dish_ragi_masala_dosa.jpg",
+    sweet: "/images/dish_chocolate_dosa.jpg",
     facility: "/images/franchise_cloud_kitchen_1793814093845.jpg",
   }
 };
@@ -140,7 +140,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Golden crisp fermented crepe served with fresh grated coconut chutney, tangy tomato chutney and hot sambar.",
         price: "₹99",
-        image: "/images/dish_plain_dosa.jpeg",
+        image: "/images/dish_plain_dosa.jpg",
         tag: "Classic"
       },
       {
@@ -149,7 +149,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Signature crisp dosa filled with savory tempered spiced potato bhaji, paired with fresh coconut and tomato dips.",
         price: "₹149",
-        image: "/images/dish_masala_dosa.jpeg",
+        image: "/images/dish_masala_dosa.jpg",
         tag: "Bestseller"
       },
       {
@@ -167,7 +167,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Melt-in-mouth ultra-soft steamed rice and urad lentil cakes accompanied by aromatic homestyle drumstick sambar.",
         price: "₹129",
-        image: "/images/dish_idli_4_pcs.jpeg",
+        image: "/images/dish_idli_4_pcs.jpg",
         tag: "Healthy"
       },
       {
@@ -176,7 +176,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Golden crisp on the outside, fluffy cloud-soft inside. Spiced with crushed peppercorns and whole cumin.",
         price: "₹149",
-        image: "/images/dish_medu_vada_4_pcs.jpeg",
+        image: "/images/dish_medu_vada_4_pcs.jpg",
         tag: "Crispy"
       },
       {
@@ -185,7 +185,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Fluffy steamed idlis stuffed with a flavorful spiced vegetable medley, served with chutney trio.",
         price: "₹149",
-        image: "/images/dish_stuffed_idli_4_pcs.jpeg",
+        image: "/images/dish_stuffed_idli_4_pcs.jpg",
         tag: "Chef Special"
       },
       {
@@ -203,7 +203,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Slow-roasted semolina tempered with mustard seeds, crunchy urad dal, ginger, and curry leaves in pure desi ghee.",
         price: "₹149",
-        image: "/images/dish_upma.jpeg",
+        image: "/images/dish_upma.jpg",
         tag: "Homestyle"
       },
       {
@@ -212,7 +212,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Crispy-shelled steamed dumplings made from fermented batter, tempered with onions, mustard, and green chillies.",
         price: "₹189",
-        image: "/images/dish_masala_appe.jpeg",
+        image: "/images/dish_masala_appe.jpg",
         tag: "Popular"
       }
     ]
@@ -228,7 +228,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Nutritious stone-ground finger millet crepe cooked crisp on cast iron, paired with homemade low-oil coconut chutney.",
         price: "₹149",
-        image: "/images/dish_ragi_plain_dosa.jpeg",
+        image: "/images/dish_ragi_plain_dosa.jpg",
         tag: "Millet Power"
       },
       {
@@ -237,7 +237,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Fiber-rich crispy ragi crepe folded over delicate homestyle potato stuffing seasoned with turmeric and mustard.",
         price: "₹189",
-        image: "/images/dish_ragi_masala_dosa.jpeg",
+        image: "/images/dish_ragi_masala_dosa.jpg",
         tag: "Top Seller"
       },
       {
@@ -255,7 +255,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Mineral-rich steamed ragi cakes providing long-lasting energy, served with traditional drumstick sambar.",
         price: "₹119",
-        image: "/images/dish_ragi_idli_4_pcs.jpeg",
+        image: "/images/dish_ragi_idli_4_pcs.jpg",
         tag: "Superfood"
       },
       {
@@ -264,7 +264,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Hearty ragi cakes filled with a lightly spiced vegetable core, served with antioxidant-rich tomato and coconut chutneys.",
         price: "₹189",
-        image: "/images/dish_ragi_stuffed_idli_4_pcs.jpeg",
+        image: "/images/dish_ragi_stuffed_idli_4_pcs.jpg",
         tag: "Wholesome"
       },
       {
@@ -323,7 +323,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Korean Ramen",
         description: "Fiery Korean chili paste broth loaded with sweet corn, spring onions, mushrooms, and springy ramen noodles.",
         price: "₹299",
-        image: "/images/dish_korean_hot___spicy_ramen.jpeg",
+        image: "/images/dish_korean_hot___spicy_ramen.jpg",
         tag: "Spicy"
       },
       {
@@ -332,7 +332,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Korean Ramen",
         description: "Rich, mildly spiced velvety curry noodle soup topped with fresh garden greens and sesame seeds.",
         price: "₹299",
-        image: "/images/dish_korean_curry_ramen.jpeg",
+        image: "/images/dish_korean_curry_ramen.jpg",
         tag: "Fusion"
       }
     ]
@@ -348,7 +348,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Sweet Tooth",
         description: "Paper-thin hot crisp crepe generously slathered with molten hazelnut chocolate ganache and chocolate sprinkles.",
         price: "₹199",
-        image: "/images/dish_chocolate_dosa.jpeg",
+        image: "/images/dish_chocolate_dosa.jpg",
         tag: "Sweet Delight"
       },
       {
@@ -357,7 +357,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Sweet Tooth",
         description: "Warm, fluffy cocoa-infused steamed idli pillows drizzled with decadent dark chocolate syrup.",
         price: "₹199",
-        image: "/images/dish_chocolate_idli_4_pcs.jpeg",
+        image: "/images/dish_chocolate_idli_4_pcs.jpg",
         tag: "Unique"
       },
       {
@@ -366,7 +366,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Sweet Tooth",
         description: "Twelve bite-sized fluffy buttermilk pancakes crowned with warm chocolate sauce and powdered sugar.",
         price: "₹229",
-        image: "/images/dish_mini_chocolate_pancakes_12_pcs.jpeg",
+        image: "/images/dish_mini_chocolate_pancakes_12_pcs.jpg",
         tag: "Bestseller Dessert"
       }
     ]
@@ -382,7 +382,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "The South Indian Lunch",
         description: "Aromatic black-pepper and tamarind slow-simmered rasam mixed with fragrant steamed rice. Pure healing comfort.",
         price: "₹249",
-        image: "/images/food_south_indian_thali_1793814074632.jpg",
+        image: "/images/dish_authentic_rasam_rice.jpg",
         tag: "Soul Food"
       },
       {
@@ -409,7 +409,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "The South Indian Lunch",
         description: "Fresh grated coconut ground with green chilies and ginger, delicately tossed with warm basmati rice and urad dal tadka.",
         price: "₹249",
-        image: "/images/kitchen_mom_cooking_1793814074228.jpg",
+        image: "/images/dish_coconut_chutney_rice.jpg",
         tag: "Traditional"
       }
     ]
