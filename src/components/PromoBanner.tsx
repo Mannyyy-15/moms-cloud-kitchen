@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, ArrowRight, Store, ShieldCheck } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 
 export const PromoBanner: React.FC = () => {
@@ -17,8 +17,10 @@ export const PromoBanner: React.FC = () => {
             <div className="absolute inset-0 z-0 opacity-25 mix-blend-luminosity pointer-events-none">
               <img
                 src="/images/hero_banner_custom.jpg"
-                alt="Mom's Cloud Kitchen Official Banner"
+                alt=""
                 className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </div>
 

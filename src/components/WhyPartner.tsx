@@ -66,6 +66,8 @@ export const WhyPartner: React.FC = () => {
                   alt="Mom preparing authentic home-style food in Mom's Cloud Kitchen"
                   className="w-full h-full object-cover object-center"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-6 bg-white border-t border-[#E87924]/15">

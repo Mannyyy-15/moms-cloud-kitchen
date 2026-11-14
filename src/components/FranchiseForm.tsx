@@ -1,10 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Send, CheckCircle2, AlertCircle, Loader2, Phone, Mail, MessageSquare, ExternalLink, ShieldCheck, Clock, Instagram } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Send, CheckCircle2, AlertCircle, Loader2, Phone, Mail, MessageSquare, ExternalLink, ShieldCheck, Clock } from 'lucide-react';
 import { BRAND_INFO } from '../data/brandData';
 import { FranchiseFormData, FranchiseType } from '../types';
 import { ScrollReveal, TextReveal } from './ScrollReveal';
-import { getStoredUtm } from '../utils/utm';
+import { getStoredUtm, pickUtms } from '../utils/utm';
 import { trackFranchiseLead } from '../utils/metaPixel';
+
+type FormErrors = Partial<Record<keyof FranchiseFormData, string>>;
+
+const CONSENT_VERSION = '1.0';
+const SUBMIT_TIMEOUT_MS = 15000;
+
+const MODEL_BUDGETS: Record<FranchiseType, string> = {
+  'Cloud Kitchen': '₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)',
+  'Cloud Kitchen + Dine-In': '₹13 Lakhs – ₹14 Lakhs (Cloud + Dine-In Turnkey Setup)',
+  'Master Franchise (Cloud Kitchen)': '₹20 Lakhs – ₹25 Lakhs (City Master Franchise Network)',
+  'Master Franchise (Cloud + Dine-In)': '₹20 Lakhs – ₹25 Lakhs (City Master Franchise Network)',
+  'Single Franchisee': '₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)',
+  'Master Franchise': '₹20 Lakhs – ₹25 Lakhs (City Master Franchise Network)',
+};
+
+const getDefaultBudget = (model: FranchiseType): string =>
+  MODEL_BUDGETS[model] ?? MODEL_BUDGETS['Cloud Kitchen'];
+
+const isExplicitFailure = (body: unknown): boolean => {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return false;
+  const success = (body as { success?: unknown }).success;
+  return success === false || success === 'false';
+};
+
+const FIELD_ORDER: (keyof FranchiseFormData)[] = [
+  'fullName',
+  'contactNumber',
+  'email',
+  'city',
+  'investmentBudget',
+  'consent',
+];
 
 interface FranchiseFormProps {
   selectedFranchiseType?: FranchiseType;
@@ -29,26 +61,53 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
   // Keep franchise type synced if user selects from model cards
   useEffect(() => {
     if (selectedFranchiseType) {
-      setFormData((prev) => ({ ...prev, franchiseType: selectedFranchiseType }));
+      setFormData((prev) => ({
+        ...prev,
+        franchiseType: selectedFranchiseType,
+        investmentBudget: budgetTouchedRef.current
+          ? prev.investmentBudget
+          : getDefaultBudget(selectedFranchiseType),
+      }));
     }
   }, [selectedFranchiseType]);
 
   // Load UTM parameters into state on mount
   useEffect(() => {
-    const utms = getStoredUtm();
+    const utms = pickUtms(getStoredUtm());
     if (Object.keys(utms).length > 0) {
       setFormData((prev) => ({ ...prev, ...utms }));
     }
   }, []);
 
-  const [errors, setErrors] = useState<Partial<Record<keyof FranchiseFormData, string>>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [lastWhatsAppUrl, setLastWhatsAppUrl] = useState<string>('');
+  const [honeypot, setHoneypot] = useState('');
+
+  const submitLockRef = useRef(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const whatsappTimeoutRef = useRef<number | null>(null);
+  const budgetTouchedRef = useRef(false);
+  const successRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (submitSuccess) {
+      successRef.current?.focus();
+    }
+  }, [submitSuccess]);
+
+  useEffect(() => {
+    return () => {
+      if (whatsappTimeoutRef.current !== null) {
+        window.clearTimeout(whatsappTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const validate = (): boolean => {
-    const errs: Partial<Record<keyof FranchiseFormData, string>> = {};
+    const errs: FormErrors = {};
 
     if (!formData.fullName.trim() || formData.fullName.trim().length < 2) {
       errs.fullName = 'Please enter your full name.';
@@ -80,10 +139,22 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
     }
 
     setErrors(errs);
-    return Object.keys(errs).length === 0;
+
+    const firstInvalid = FIELD_ORDER.find((field) => errs[field]);
+    if (firstInvalid) {
+      document.getElementById(String(firstInvalid))?.focus();
+      return false;
+    }
+
+    return true;
   };
 
   const buildWhatsAppMessage = () => {
+    const utms = pickUtms(formData);
+    const source = utms.utm_source
+      ? `${utms.utm_source}${utms.utm_medium ? ` / ${utms.utm_medium}` : ''}`
+      : 'Website Enquiry';
+
     return (
       `*New Franchise Enquiry - Mom's Cloud Kitchen*\n\n` +
       `👤 *Applicant Name:* ${formData.fullName.trim()}\n` +
@@ -94,45 +165,94 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
       `⏱️ *Target Timeline:* ${formData.timeline || 'Within 30 Days'}\n` +
       `🏪 *Franchise Model:* ${formData.franchiseType}\n` +
       `📝 *Notes:* ${formData.message.trim() || 'Ready for 1-on-1 discovery discussion'}\n\n` +
-      `🌐 _Source: www.momscloudkitchen.com (Meta Ads Enquiry)_`
+      `🌐 _Source: ${source} · ${BRAND_INFO.domain}_`
     );
+  };
+
+  const handleModelChange = (model: FranchiseType) => {
+    setFormData((prev) => ({
+      ...prev,
+      franchiseType: model,
+      investmentBudget: budgetTouchedRef.current
+        ? prev.investmentBudget
+        : getDefaultBudget(model),
+    }));
+  };
+
+  const resetForm = () => {
+    if (whatsappTimeoutRef.current !== null) {
+      window.clearTimeout(whatsappTimeoutRef.current);
+      whatsappTimeoutRef.current = null;
+    }
+    setSubmitSuccess(false);
+    setSubmitError(null);
+    setErrors({});
+    setLastWhatsAppUrl('');
+    setHoneypot('');
+    budgetTouchedRef.current = false;
+    setFormData((prev) => ({
+      fullName: '',
+      contactNumber: '',
+      email: '',
+      city: '',
+      investmentBudget: getDefaultBudget(prev.franchiseType),
+      timeline: 'Immediately (Within 30 Days)',
+      brand: BRAND_INFO.name,
+      franchiseType: prev.franchiseType,
+      message: '',
+      consent: false,
+      ...pickUtms(prev),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isSubmitting || submitLockRef.current) return;
+    if (honeypot.trim()) return;
+
     setSubmitError(null);
 
     if (!validate()) {
       return;
     }
 
+    submitLockRef.current = true;
     setIsSubmitting(true);
 
     const waMsg = buildWhatsAppMessage();
-    const encodedWaUrl = `https://wa.me/918484030988?text=${encodeURIComponent(waMsg)}`;
-    setLastWhatsAppUrl(encodedWaUrl);
+    const waNumber = BRAND_INFO.phoneClean.replace(/\D/g, '');
+    const encodedWaUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMsg)}`;
+
+    const safeName = formData.fullName.trim().slice(0, 100);
+    const safeCity = formData.city.trim().slice(0, 100);
+    const safeMessage = formData.message.trim().slice(0, 1000);
+
+    const payload = {
+      name: safeName,
+      phone: formData.contactNumber.trim().slice(0, 20),
+      email: formData.email.trim().slice(0, 254),
+      city: safeCity,
+      investment_budget: formData.investmentBudget,
+      timeline: formData.timeline || 'Within 30 Days',
+      franchise_type: formData.franchiseType,
+      notes: safeMessage,
+      brand: BRAND_INFO.name,
+      ...pickUtms(formData),
+      consent: formData.consent,
+      consent_at: new Date().toISOString(),
+      consent_version: CONSENT_VERSION,
+      page_url: typeof window !== 'undefined' ? window.location.href : '',
+      referrer: typeof document !== 'undefined' ? document.referrer : '',
+      _subject: `New Franchise Lead: ${safeName} (${safeCity})`.replace(/[\r\n]+/g, ' '),
+      _template: 'table',
+    };
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    const timeoutId = window.setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
 
     try {
-      const payload = {
-        name: formData.fullName.trim(),
-        phone: formData.contactNumber.trim(),
-        email: formData.email.trim(),
-        city: formData.city.trim(),
-        investment_budget: formData.investmentBudget,
-        timeline: formData.timeline || 'Within 30 Days',
-        franchise_type: formData.franchiseType,
-        notes: formData.message.trim(),
-        brand: BRAND_INFO.name,
-        utm_source: formData.utm_source || '',
-        utm_medium: formData.utm_medium || '',
-        utm_campaign: formData.utm_campaign || '',
-        utm_content: formData.utm_content || '',
-        utm_term: formData.utm_term || '',
-        fbclid: formData.fbclid || '',
-        _subject: `New Franchise Lead: ${formData.fullName.trim()} (${formData.city.trim()})`,
-        _template: 'table',
-      };
-
       const res = await fetch(BRAND_INFO.formEndpoint, {
         method: 'POST',
         headers: {
@@ -140,40 +260,41 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
           Accept: 'application/json',
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
 
-      if (res.ok) {
-        trackFranchiseLead({
-          model: formData.franchiseType,
-          city: formData.city.trim(),
-        });
-
-        setSubmitSuccess(true);
-        setIsSubmitting(false);
-
-        // Auto redirect to WhatsApp after 1 second
-        setTimeout(() => {
-          window.open(encodedWaUrl, '_blank');
-        }, 1200);
-      } else {
-        // Fallback to WhatsApp redirect if mail API throttles
-        trackFranchiseLead({
-          model: formData.franchiseType,
-          city: formData.city.trim(),
-        });
-        setSubmitSuccess(true);
-        setIsSubmitting(false);
-        window.open(encodedWaUrl, '_blank');
+      let body: unknown = null;
+      try {
+        body = await res.json();
+      } catch {
+        body = null;
       }
-    } catch (err) {
-      console.warn('Form submission encountered network error, falling back to direct WhatsApp:', err);
+
+      if (!res.ok || isExplicitFailure(body)) {
+        throw new Error('submission-failed');
+      }
+
       trackFranchiseLead({
         model: formData.franchiseType,
-        city: formData.city.trim(),
+        city: safeCity,
       });
+
+      setLastWhatsAppUrl(encodedWaUrl);
       setSubmitSuccess(true);
+
+      whatsappTimeoutRef.current = window.setTimeout(() => {
+        whatsappTimeoutRef.current = null;
+        window.open(encodedWaUrl, '_blank', 'noopener,noreferrer');
+      }, 1200);
+    } catch {
+      setSubmitError(
+        `We couldn't submit your application right now. Please try again or reach us on WhatsApp at ${BRAND_INFO.phoneDisplay}.`
+      );
+    } finally {
+      window.clearTimeout(timeoutId);
+      abortRef.current = null;
       setIsSubmitting(false);
-      window.open(encodedWaUrl, '_blank');
+      submitLockRef.current = false;
     }
   };
 
@@ -284,7 +405,13 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
             <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-[#E87924]/20">
               {submitSuccess ? (
                 /* Confirmed Success State */
-                <div className="text-center py-10 px-2 animate-in fade-in duration-300">
+                <div
+                  ref={successRef}
+                  role="status"
+                  aria-live="polite"
+                  tabIndex={-1}
+                  className="text-center py-10 px-2 animate-in fade-in duration-300 focus:outline-none"
+                >
                   <div className="w-16 h-16 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 className="w-10 h-10 text-[#25D366]" />
                   </div>
@@ -293,7 +420,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                   </h3>
                   <p className="text-sm sm:text-base text-[#28231E]/80 max-w-md mx-auto leading-relaxed mb-6">
                     Your franchise application for <strong>{formData.franchiseType}</strong> in{' '}
-                    <strong>{formData.city}</strong> has been registered with our operations desk and sent to{' '}
+                    <strong>{formData.city}</strong> has been received by our operations desk. You can continue the conversation on{' '}
                     <strong>WhatsApp ({BRAND_INFO.phoneDisplay})</strong>.
                   </p>
 
@@ -317,21 +444,8 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     </a>
 
                     <button
-                      onClick={() => {
-                        setSubmitSuccess(false);
-                        setFormData({
-                          fullName: '',
-                          contactNumber: '',
-                          email: '',
-                          city: '',
-                          investmentBudget: '₹9 Lakhs – ₹10 Lakhs (Cloud Kitchen Turnkey Setup)',
-                          timeline: 'Immediately (Within 30 Days)',
-                          brand: BRAND_INFO.name,
-                          franchiseType: selectedFranchiseType,
-                          message: '',
-                          consent: false,
-                        });
-                      }}
+                      type="button"
+                      onClick={resetForm}
                       className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl border border-[#28231E]/20 text-xs sm:text-sm font-semibold hover:bg-[#FFF9F2] transition-colors"
                     >
                       Submit Another Query
@@ -359,6 +473,18 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
 
                   {/* Field 1: Full Name */}
                   <div>
+                    <div className="sr-only" aria-hidden="true">
+                      <label htmlFor="companyWebsite">Company Website</label>
+                      <input
+                        type="text"
+                        id="companyWebsite"
+                        name="companyWebsite"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </div>
                     <label htmlFor="fullName" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-1.5">
                       Full Name <span className="text-red-500">*</span>
                     </label>
@@ -371,12 +497,20 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                         if (errors.fullName) setErrors({ ...errors, fullName: undefined });
                       }}
                       placeholder="e.g. Ramesh Sharma"
+                      autoComplete="name"
+                      maxLength={100}
+                      aria-invalid={Boolean(errors.fullName)}
+                      aria-describedby={errors.fullName ? 'fullName-error' : undefined}
                       className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                         errors.fullName ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                       }`}
                       required
                     />
-                    {errors.fullName && <p className="text-xs text-red-600 mt-1 font-medium">{errors.fullName}</p>}
+                    {errors.fullName && (
+                      <p id="fullName-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                        {errors.fullName}
+                      </p>
+                    )}
                   </div>
 
                   {/* Two-Column: Mobile Number & Email Address */}
@@ -394,13 +528,20 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           if (errors.contactNumber) setErrors({ ...errors, contactNumber: undefined });
                         }}
                         placeholder="e.g. 8484030988"
+                        autoComplete="tel"
+                        inputMode="tel"
+                        maxLength={20}
+                        aria-invalid={Boolean(errors.contactNumber)}
+                        aria-describedby={errors.contactNumber ? 'contactNumber-error' : undefined}
                         className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.contactNumber ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
                       />
                       {errors.contactNumber && (
-                        <p className="text-xs text-red-600 mt-1 font-medium">{errors.contactNumber}</p>
+                        <p id="contactNumber-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                          {errors.contactNumber}
+                        </p>
                       )}
                     </div>
 
@@ -417,12 +558,21 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           if (errors.email) setErrors({ ...errors, email: undefined });
                         }}
                         placeholder="e.g. partner@example.com"
+                        autoComplete="email"
+                        inputMode="email"
+                        maxLength={254}
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? 'email-error' : undefined}
                         className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.email ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
                       />
-                      {errors.email && <p className="text-xs text-red-600 mt-1 font-medium">{errors.email}</p>}
+                      {errors.email && (
+                        <p id="email-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                          {errors.email}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -441,12 +591,21 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           if (errors.city) setErrors({ ...errors, city: undefined });
                         }}
                         placeholder="e.g. Mumbai, Vasai, Virar, Pune"
+                        autoComplete="address-level2"
+                        inputMode="text"
+                        maxLength={100}
+                        aria-invalid={Boolean(errors.city)}
+                        aria-describedby={errors.city ? 'city-error' : undefined}
                         className={`w-full px-4 py-3.5 rounded-xl border bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm ${
                           errors.city ? 'border-red-500 ring-1 ring-red-500' : 'border-[#28231E]/15'
                         }`}
                         required
                       />
-                      {errors.city && <p className="text-xs text-red-600 mt-1 font-medium">{errors.city}</p>}
+                      {errors.city && (
+                        <p id="city-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                          {errors.city}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -457,9 +616,12 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                         id="investmentBudget"
                         value={formData.investmentBudget}
                         onChange={(e) => {
+                          budgetTouchedRef.current = true;
                           setFormData({ ...formData, investmentBudget: e.target.value });
                           if (errors.investmentBudget) setErrors({ ...errors, investmentBudget: undefined });
                         }}
+                        aria-invalid={Boolean(errors.investmentBudget)}
+                        aria-describedby={errors.investmentBudget ? 'investmentBudget-error' : undefined}
                         className="w-full px-4 py-3.5 rounded-xl border border-[#28231E]/15 bg-[#FFF9F2]/50 text-[#28231E] focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm cursor-pointer"
                         required
                       >
@@ -479,6 +641,11 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           ₹20 Lakhs – ₹25 Lakhs (City Master Franchise)
                         </option>
                       </select>
+                      {errors.investmentBudget && (
+                        <p id="investmentBudget-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                          {errors.investmentBudget}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -501,10 +668,10 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
 
                   {/* Franchise Model Preference Selection */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-bold text-[#28231E] mb-2">
+                    <label id="franchiseType-label" className="block text-xs sm:text-sm font-bold text-[#28231E] mb-2">
                       Select Franchise Model Format
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div role="radiogroup" aria-labelledby="franchiseType-label" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <label
                         className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${
                           formData.franchiseType === 'Cloud Kitchen' || formData.franchiseType === 'Single Franchisee'
@@ -517,7 +684,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           name="franchiseType"
                           value="Cloud Kitchen"
                           checked={formData.franchiseType === 'Cloud Kitchen' || formData.franchiseType === 'Single Franchisee'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Cloud Kitchen' })}
+                          onChange={() => handleModelChange('Cloud Kitchen')}
                           className="mt-1 accent-[#E87924]"
                         />
                         <div>
@@ -538,7 +705,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           name="franchiseType"
                           value="Cloud Kitchen + Dine-In"
                           checked={formData.franchiseType === 'Cloud Kitchen + Dine-In'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Cloud Kitchen + Dine-In' })}
+                          onChange={() => handleModelChange('Cloud Kitchen + Dine-In')}
                           className="mt-1 accent-[#E87924]"
                         />
                         <div>
@@ -559,7 +726,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           name="franchiseType"
                           value="Master Franchise (Cloud Kitchen)"
                           checked={formData.franchiseType === 'Master Franchise (Cloud Kitchen)' || formData.franchiseType === 'Master Franchise'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Master Franchise (Cloud Kitchen)' })}
+                          onChange={() => handleModelChange('Master Franchise (Cloud Kitchen)')}
                           className="mt-1 accent-[#E87924]"
                         />
                         <div>
@@ -580,7 +747,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                           name="franchiseType"
                           value="Master Franchise (Cloud + Dine-In)"
                           checked={formData.franchiseType === 'Master Franchise (Cloud + Dine-In)'}
-                          onChange={() => setFormData({ ...formData, franchiseType: 'Master Franchise (Cloud + Dine-In)' })}
+                          onChange={() => handleModelChange('Master Franchise (Cloud + Dine-In)')}
                           className="mt-1 accent-[#E87924]"
                         />
                         <div>
@@ -602,6 +769,7 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Share your background, target catchment or questions..."
+                      maxLength={1000}
                       className="w-full px-4 py-3 rounded-xl border border-[#28231E]/15 bg-[#FFF9F2]/50 text-[#28231E] placeholder:text-[#28231E]/40 focus:outline-none focus:ring-2 focus:ring-[#E87924] transition-all text-sm resize-none"
                     />
                   </div>
@@ -611,11 +779,14 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                     <label className="flex items-start gap-2.5 cursor-pointer">
                       <input
                         type="checkbox"
+                        id="consent"
                         checked={formData.consent}
                         onChange={(e) => {
                           setFormData({ ...formData, consent: e.target.checked });
                           if (errors.consent) setErrors({ ...errors, consent: undefined });
                         }}
+                        aria-invalid={Boolean(errors.consent)}
+                        aria-describedby={errors.consent ? 'consent-error' : undefined}
                         className="mt-1 w-4 h-4 rounded text-[#E87924] accent-[#E87924] focus:ring-[#E87924] cursor-pointer"
                         required
                       />
@@ -624,7 +795,11 @@ export const FranchiseForm: React.FC<FranchiseFormProps> = ({
                         <span className="text-red-500">*</span>
                       </span>
                     </label>
-                    {errors.consent && <p className="text-xs text-red-600 mt-1 font-medium">{errors.consent}</p>}
+                    {errors.consent && (
+                      <p id="consent-error" role="alert" className="text-xs text-red-600 mt-1 font-medium">
+                        {errors.consent}
+                      </p>
+                    )}
                   </div>
 
                   {/* Submit Button */}

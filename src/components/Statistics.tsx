@@ -6,135 +6,117 @@ interface AnimatedCounterProps {
   value: string;
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ value }) => {
-  const [displayValue, setDisplayValue] = useState<string>('0');
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [shouldReduceMotion] = useState(prefersReducedMotion);
+  const [displayValue, setDisplayValue] = useState<string>(
+    shouldReduceMotion ? value : '0'
+  );
+  const [hasAnimated, setHasAnimated] = useState(shouldReduceMotion);
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    const currentElem = elementRef.current;
+    if (!currentElem) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated) {
+        if (entries[0]?.isIntersecting) {
           setHasAnimated(true);
+          observer.disconnect();
         }
       },
       { threshold: 0.25 }
     );
 
-    const currentElem = elementRef.current;
-    if (currentElem) {
-      observer.observe(currentElem);
-    }
+    observer.observe(currentElem);
 
-    return () => {
-      if (currentElem) observer.unobserve(currentElem);
-      observer.disconnect();
-    };
-  }, [hasAnimated]);
+    return () => observer.disconnect();
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
-    if (!hasAnimated) return;
+    if (!hasAnimated || shouldReduceMotion) return;
 
-    let startTime: number | null = null;
-    const duration = 1800; // 1.8s smooth count animation
+    let draw: ((eased: number) => void) | null = null;
 
-    // Case 1: "4,000+"
     if (value.includes('4,000') || value.includes('4000')) {
       const end = 4000;
-      const frame = (time: number) => {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(end * easeOut);
-        setDisplayValue(current.toLocaleString('en-IN') + '+');
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        }
+      draw = (eased) => {
+        setDisplayValue(Math.floor(end * eased).toLocaleString('en-IN') + '+');
       };
-      requestAnimationFrame(frame);
-      return;
-    }
-
-    // Case 2: "28–35%"
-    if (value.includes('28') && value.includes('35')) {
-      const frame = (time: number) => {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const v1 = Math.floor(28 * easeOut);
-        const v2 = Math.floor(35 * easeOut);
-        setDisplayValue(`${v1}–${v2}%`);
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        }
+    } else if (value.includes('28') && value.includes('35')) {
+      draw = (eased) => {
+        setDisplayValue(`${Math.floor(28 * eased)}–${Math.floor(35 * eased)}%`);
       };
-      requestAnimationFrame(frame);
-      return;
-    }
-
-    // Case 3: "6–8 Mos"
-    if (value.includes('6') && value.includes('8') && value.includes('Mos')) {
-      const frame = (time: number) => {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const v1 = Math.floor(6 * easeOut);
-        const v2 = Math.floor(8 * easeOut);
-        setDisplayValue(`${v1}–${v2} Mos`);
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        }
+    } else if (value.includes('6') && value.includes('8') && value.includes('Mos')) {
+      draw = (eased) => {
+        setDisplayValue(`${Math.floor(6 * eased)}–${Math.floor(8 * eased)} Mos`);
       };
-      requestAnimationFrame(frame);
-      return;
-    }
-
-    // Case 4: "Feb 2024"
-    if (value.includes('2024')) {
+    } else if (value.includes('2024')) {
       const startYear = 2018;
       const endYear = 2024;
-      const frame = (time: number) => {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(startYear + (endYear - startYear) * easeOut);
-        setDisplayValue(`Feb ${current}`);
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        }
+      draw = (eased) => {
+        setDisplayValue(`Feb ${Math.floor(startYear + (endYear - startYear) * eased)}`);
       };
-      requestAnimationFrame(frame);
-      return;
-    }
+    } else {
+      const numericMatch = value.match(/\d+/);
+      if (!numericMatch) {
+        setDisplayValue(value);
+        return;
+      }
 
-    // Generic fallback: Parse any number
-    const numericMatch = value.match(/\d+/);
-    if (numericMatch) {
       const target = parseInt(numericMatch[0], 10);
       const suffix = value.replace(/\d+/, '');
-      const frame = (time: number) => {
-        if (!startTime) startTime = time;
-        const progress = Math.min((time - startTime) / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(target * easeOut);
-        setDisplayValue(`${current}${suffix}`);
-
-        if (progress < 1) {
-          requestAnimationFrame(frame);
-        }
+      draw = (eased) => {
+        setDisplayValue(`${Math.floor(target * eased)}${suffix}`);
       };
-      requestAnimationFrame(frame);
-      return;
     }
 
-    setDisplayValue(value);
-  }, [hasAnimated, value]);
+    if (!draw) return;
+    const animate = draw;
 
-  return <div ref={elementRef}>{hasAnimated ? displayValue : '0'}</div>;
+    const duration = 1800;
+    let rafId: number | null = null;
+    let startTime: number | null = null;
+    let isCancelled = false;
+
+    const frame = (time: number) => {
+      if (isCancelled) return;
+      if (startTime === null) startTime = time;
+
+      const progress = Math.min((time - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      animate(eased);
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(frame);
+      }
+    };
+
+    rafId = requestAnimationFrame(frame);
+
+    return () => {
+      isCancelled = true;
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, [hasAnimated, shouldReduceMotion, value]);
+
+  return (
+    <div ref={elementRef}>
+      <span className="sr-only">{value}</span>
+      <span aria-hidden="true" className="inline-grid text-center">
+        <span className="invisible col-start-1 row-start-1">{value}</span>
+        <span className="col-start-1 row-start-1">
+          {hasAnimated ? displayValue : '0'}
+        </span>
+      </span>
+    </div>
+  );
 };
 
 export const Statistics: React.FC = () => {

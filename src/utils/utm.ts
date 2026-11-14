@@ -2,6 +2,61 @@ import { UtmParams } from '../types';
 
 const STORAGE_KEY = 'moms_utm_attribution';
 
+export const UTM_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+  'fbclid',
+] as const;
+
+const MAX_VALUE_LENGTH = 200;
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    (Object.getPrototypeOf(value) === Object.prototype ||
+      Object.getPrototypeOf(value) === null)
+  );
+}
+
+function sanitizeValue(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.slice(0, MAX_VALUE_LENGTH);
+}
+
+function sanitizeUtm(value: unknown): UtmParams {
+  if (!isPlainObject(value)) return {};
+
+  const result: UtmParams = {};
+  for (const key of UTM_KEYS) {
+    const clean = sanitizeValue(value[key]);
+    if (clean) result[key] = clean;
+  }
+  return result;
+}
+
+function readStoredUtm(): UtmParams {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    return sanitizeUtm(JSON.parse(raw));
+  } catch {
+    return {};
+  }
+}
+
+function writeStoredUtm(utm: UtmParams): void {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(utm));
+  } catch {}
+}
+
 /**
  * Extracts UTM parameters and Facebook Click ID from the current URL search query
  * and stores them in sessionStorage to preserve attribution across navigation.
@@ -9,44 +64,26 @@ const STORAGE_KEY = 'moms_utm_attribution';
 export function captureAndStoreUtm(): UtmParams {
   if (typeof window === 'undefined') return {};
 
+  let newUtms: UtmParams = {};
   try {
     const urlParams = new URLSearchParams(window.location.search);
-    const newUtms: UtmParams = {};
-
-    const keys: (keyof UtmParams)[] = [
-      'utm_source',
-      'utm_medium',
-      'utm_campaign',
-      'utm_content',
-      'utm_term',
-      'fbclid',
-    ];
-
-    let hasAny = false;
-    for (const key of keys) {
-      const val = urlParams.get(key);
-      if (val) {
-        newUtms[key] = val.trim();
-        hasAny = true;
-      }
+    for (const key of UTM_KEYS) {
+      const clean = sanitizeValue(urlParams.get(key));
+      if (clean) newUtms[key] = clean;
     }
-
-    // Retrieve existing stored UTMs if any
-    const rawStored = sessionStorage.getItem(STORAGE_KEY);
-    const existingUtms: UtmParams = rawStored ? JSON.parse(rawStored) : {};
-
-    // Merge: prioritize current URL params if present, otherwise keep previously stored
-    const merged: UtmParams = { ...existingUtms, ...(hasAny ? newUtms : {}) };
-
-    if (hasAny || Object.keys(merged).length > 0) {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-    }
-
-    return merged;
-  } catch (e) {
-    console.warn('Unable to access sessionStorage for UTMs:', e);
-    return {};
+  } catch {
+    newUtms = {};
   }
+
+  const hasAny = Object.keys(newUtms).length > 0;
+  const existingUtms = readStoredUtm();
+  const merged: UtmParams = { ...existingUtms, ...newUtms };
+
+  if (hasAny || Object.keys(existingUtms).length > 0) {
+    writeStoredUtm(merged);
+  }
+
+  return merged;
 }
 
 /**
@@ -54,11 +91,9 @@ export function captureAndStoreUtm(): UtmParams {
  */
 export function getStoredUtm(): UtmParams {
   if (typeof window === 'undefined') return {};
-  try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
+  return readStoredUtm();
 }
 
+export function pickUtms(value: unknown): UtmParams {
+  return sanitizeUtm(value);
+}

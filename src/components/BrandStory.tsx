@@ -60,11 +60,11 @@ export const BrandStory: React.FC = () => {
             <ScrollReveal direction="up" delay={0.1}>
               <div className="space-y-4 text-base sm:text-lg text-[#28231E]/85 leading-relaxed font-normal">
                 <p className="text-lg sm:text-xl font-medium text-[#28231E] leading-relaxed">
-                  Every great journey begins with a dream. Mine began in the narrow lanes of <strong className="font-bold text-[#E87924]">Colaba, Mumbai</strong>, where I grew up in a slum with limited resources but unlimited dreams.
+                  Every great journey begins with a dream. Mine began in the narrow lanes of <strong className="font-bold text-[#C2540A]">Colaba, Mumbai</strong>, where I grew up in a slum with limited resources but unlimited dreams.
                 </p>
 
                 <p>
-                  I started my professional journey with <strong className="font-bold text-[#28231E]">Café Coffee Day</strong>, not as a manager or a leader, but as a <strong className="font-bold text-[#E87924]">Housekeeping Associate</strong>. I had no shortcuts, no influential connections and no guaranteed success. All I had was the willingness to work hard, learn every day and prove myself.
+                  I started my professional journey with <strong className="font-bold text-[#28231E]">Café Coffee Day</strong>, not as a manager or a leader, but as a <strong className="font-bold text-[#C2540A]">Housekeeping Associate</strong>. I had no shortcuts, no influential connections and no guaranteed success. All I had was the willingness to work hard, learn every day and prove myself.
                 </p>
 
                 <p>
@@ -72,7 +72,7 @@ export const BrandStory: React.FC = () => {
                 </p>
 
                 <p>
-                  Over the last <strong className="font-bold text-[#28231E]">20 years in the hospitality industry</strong>, I have worked across India and international markets, including the <strong className="font-bold text-[#E87924]">UAE, Oman and Qatar</strong>, eventually rising to leadership positions as a <strong className="font-bold text-[#28231E]">Head of Operations</strong>. Today, I lead operations in Mumbai, bringing years of hands-on experience, people management, business understanding and operational excellence to everything I do.
+                  Over the last <strong className="font-bold text-[#28231E]">20 years in the hospitality industry</strong>, I have worked across India and international markets, including the <strong className="font-bold text-[#C2540A]">UAE, Oman and Qatar</strong>, eventually rising to leadership positions as a <strong className="font-bold text-[#28231E]">Head of Operations</strong>. Today, I lead operations in Mumbai, bringing years of hands-on experience, people management, business understanding and operational excellence to everything I do.
                 </p>
 
                 <p>
@@ -80,11 +80,11 @@ export const BrandStory: React.FC = () => {
                 </p>
 
                 <p>
-                  Three years ago, I started <strong className="font-bold text-[#E87924]">Mom&apos;s Cloud Kitchen</strong> from <strong className="font-bold text-[#28231E]">Virar, Maharashtra</strong>, with a simple belief: <em className="font-serif-editorial italic text-[#D16719]">good food, made with love and served with honesty, will always find its way to people&apos;s hearts.</em>
+                  Three years ago, I started <strong className="font-bold text-[#C2540A]">Mom&apos;s Cloud Kitchen</strong> from <strong className="font-bold text-[#28231E]">Virar, Maharashtra</strong>, with a simple belief: <em className="font-serif-editorial italic text-[#943800]">good food, made with love and served with honesty, will always find its way to people&apos;s hearts.</em>
                 </p>
 
                 <p>
-                  What began as a small home-kitchen initiative has now delivered <strong className="font-bold text-[#E87924]">4,000+ orders</strong>, earning the trust and support of customers who have become a part of our journey.
+                  What began as a small home-kitchen initiative has now delivered <strong className="font-bold text-[#C2540A]">4,000+ orders</strong>, earning the trust and support of customers who have become a part of our journey.
                 </p>
 
                 <p>
@@ -104,18 +104,18 @@ export const BrandStory: React.FC = () => {
                 </p>
 
                 <div className="pt-4 border-t border-[#E87924]/20">
-                  <p className="font-display font-black text-xs sm:text-sm uppercase tracking-[0.2em] text-[#E87924] mb-1">
+                  <p className="font-display font-black text-xs sm:text-sm uppercase tracking-[0.2em] text-[#C2540A] mb-1">
                     SLUM TO AN ENTREPRENEUR.
                   </p>
                   <p className="text-xs sm:text-sm text-[#28231E]/80 font-medium">
                     A story of struggle. A journey of growth. A dream served with love.
                   </p>
                   <div className="mt-3 flex items-center gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#E87924]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#C2540A]" />
                     <span className="font-display font-bold text-sm sm:text-base text-[#28231E]">
                       — Aditya Kuttan
                     </span>
-                    <span className="text-xs font-semibold text-[#E87924]">
+                    <span className="text-xs font-semibold text-[#C2540A]">
                       Founder, Mom&apos;s Cloud Kitchen
                     </span>
                   </div>
@@ -158,7 +158,8 @@ export const BrandStory: React.FC = () => {
                       src={BRAND_INFO.images.founder}
                       alt="Aditya Kuttan, Founder of Mom's Cloud Kitchen"
                       className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-102"
-                      fetchPriority="high"
+                      loading="lazy"
+                      decoding="async"
                     />
 
                     <div className="absolute bottom-3 left-3 right-3 bg-black/70 backdrop-blur-md text-white p-3.5 rounded-xl border border-white/20">
@@ -183,7 +184,7 @@ export const BrandStory: React.FC = () => {
                     </div>
                     <div className="flex items-center justify-between text-xs font-bold">
                       <span className="text-[#28231E]/70">Track Record</span>
-                      <span className="text-[#E87924] font-extrabold">4,000+ Orders Fulfilled</span>
+                      <span className="text-[#C2540A] font-extrabold">4,000+ Orders Fulfilled</span>
                     </div>
                   </div>
                 </div>
@@ -193,11 +194,11 @@ export const BrandStory: React.FC = () => {
               <div className="mt-4 p-5 sm:p-6 bg-[#FFF3E3] rounded-2xl border-2 border-[#E87924]/30 shadow-sm relative">
                 <Quote className="w-8 h-8 text-[#E87924]/20 absolute top-4 right-4 pointer-events-none" />
                 <p className="font-serif-editorial italic text-sm sm:text-base text-[#28231E] leading-relaxed mb-3">
-                  &ldquo;I started my career cleaning floors in a coffee shop. Yesterday I dreamed of building a food brand that reaches thousands of homes. The journey is proof that your background doesn&apos;t decide your future — your determination does.&rdquo;
+                  &ldquo;{BRAND_INFO.founderQuote}&rdquo;
                 </p>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-[#E87924]" />
-                  <span className="font-display font-black text-xs uppercase tracking-wider text-[#E87924]">
+                  <div className="w-2 h-2 rounded-full bg-[#C2540A]" />
+                  <span className="font-display font-black text-xs uppercase tracking-wider text-[#C2540A]">
                     Aditya Kuttan · Founder
                   </span>
                 </div>
@@ -206,8 +207,8 @@ export const BrandStory: React.FC = () => {
 
             {/* 3-Stage Career Trajectory Cards */}
             <ScrollReveal direction="up" delay={0.25} className="space-y-3">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#E87924] flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#E87924]" />
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[#C2540A] flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#C2540A]" />
                 <span>The 20-Year Journey At A Glance</span>
               </h3>
 
@@ -226,7 +227,7 @@ export const BrandStory: React.FC = () => {
                           {m.role}
                         </span>
                       </div>
-                      <span className="text-[11px] font-bold text-[#E87924] bg-[#E87924]/10 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+                      <span className="text-[11px] font-bold text-[#C2540A] bg-[#C2540A]/10 px-2.5 py-0.5 rounded-full whitespace-nowrap">
                         {m.year}
                       </span>
                     </div>

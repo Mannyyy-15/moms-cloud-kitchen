@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, TrendingUp, IndianRupee, Sparkles, MessageSquare, ArrowRight } from 'lucide-react';
+import { Calculator, MessageSquare } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 import { BRAND_INFO } from '../data/brandData';
 
@@ -25,9 +25,12 @@ export const RoiCalculator: React.FC = () => {
   const annualNetProfit = netMonthlyProfit * 12;
 
   // Payback in months
-  const paybackMonths = Math.max(5.5, Math.min(8.5, Number((capex / netMonthlyProfit).toFixed(1))));
+  const paybackMonths = netMonthlyProfit > 0 ? Number((capex / netMonthlyProfit).toFixed(1)) : null;
 
   const formatINR = (val: number) => {
+    if (val < 0) {
+      return '-₹' + Math.abs(val).toLocaleString('en-IN');
+    }
     return '₹' + val.toLocaleString('en-IN');
   };
 
@@ -39,10 +42,12 @@ export const RoiCalculator: React.FC = () => {
       `💰 *Estimated AOV:* ₹${avgOrderValue}\n` +
       `📈 *Gross Monthly Revenue:* ${formatINR(grossMonthlyRevenue)}\n` +
       `💵 *Estimated Net Profit:* ${formatINR(netMonthlyProfit)}/month (~${netMarginPercent}%)\n` +
-      `⏱️ *Expected Payback:* ${paybackMonths} Months (ROI in 6 to 8 months target)\n\n` +
+      `⏱️ *Expected Payback:* ${paybackMonths !== null ? `${paybackMonths} Months (ROI in 6 to 8 months target)` : 'Not recoverable at these assumptions'}\n\n` +
       `I would like to discuss opening a Mom's Cloud Kitchen franchise in my city based on these operational metrics.`
     );
   };
+
+  const whatsappUrl = `${BRAND_INFO.whatsappUrl.split('?')[0]}?text=${encodeURIComponent(getWhatsAppMessage())}`;
 
   return (
     <section id="roi-calculator" className="scroll-mt-24 py-16 sm:py-22 lg:py-28 bg-[#FFF9F2] border-b border-[#E87924]/15 overflow-hidden">
@@ -72,6 +77,7 @@ export const RoiCalculator: React.FC = () => {
                 setDailyOrders(85);
                 setAvgOrderValue(240);
               }}
+              aria-pressed={selectedFormat === 'cloud'}
               className={`px-5 py-2 rounded-xl font-display font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer ${
                 selectedFormat === 'cloud'
                   ? 'bg-[#E87924] text-white shadow-md'
@@ -86,6 +92,7 @@ export const RoiCalculator: React.FC = () => {
                 setDailyOrders(120);
                 setAvgOrderValue(280);
               }}
+              aria-pressed={selectedFormat === 'dinein'}
               className={`px-5 py-2 rounded-xl font-display font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer ${
                 selectedFormat === 'dinein'
                   ? 'bg-[#E87924] text-white shadow-md'
@@ -132,6 +139,7 @@ export const RoiCalculator: React.FC = () => {
                   max="250"
                   step="5"
                   value={dailyOrders}
+                  aria-valuetext={`${dailyOrders} orders per day`}
                   onChange={(e) => setDailyOrders(Number(e.target.value))}
                   className="w-full h-2.5 bg-[#FFF3E3] rounded-lg appearance-none cursor-pointer accent-[#E87924]"
                 />
@@ -159,6 +167,7 @@ export const RoiCalculator: React.FC = () => {
                   max="450"
                   step="10"
                   value={avgOrderValue}
+                  aria-valuetext={`₹${avgOrderValue} per order`}
                   onChange={(e) => setAvgOrderValue(Number(e.target.value))}
                   className="w-full h-2.5 bg-[#FFF3E3] rounded-lg appearance-none cursor-pointer accent-[#E87924]"
                 />
@@ -199,7 +208,7 @@ export const RoiCalculator: React.FC = () => {
           </div>
 
           {/* Results Column */}
-          <div className="lg:col-span-6 bg-gradient-to-br from-[#1C120C] to-[#2E180B] text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between border-2 border-[#E87924]/30 relative overflow-hidden">
+          <div aria-live="polite" className="lg:col-span-6 bg-gradient-to-br from-[#1C120C] to-[#2E180B] text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between border-2 border-[#E87924]/30 relative overflow-hidden">
             <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black uppercase tracking-[0.2em] text-[#FFA858]">
@@ -240,7 +249,7 @@ export const RoiCalculator: React.FC = () => {
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-white/80">Estimated Capital Payback:</span>
                   <span className="font-display font-extrabold text-lg text-[#FFA858]">
-                    ~{paybackMonths} Months
+                    {paybackMonths !== null ? `~${paybackMonths} Months` : 'Not recoverable at these assumptions'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-xs text-white/60 pt-2 border-t border-white/10">
@@ -253,7 +262,7 @@ export const RoiCalculator: React.FC = () => {
             {/* Action Row */}
             <div className="pt-6 mt-6 border-t border-white/10 space-y-3 relative z-10">
               <a
-                href={`https://wa.me/918484030988?text=${encodeURIComponent(getWhatsAppMessage())}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] active:scale-[0.98] text-white font-extrabold text-sm uppercase tracking-wider py-4 px-6 rounded-xl shadow-lg transition-all"

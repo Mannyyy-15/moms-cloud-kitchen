@@ -15,9 +15,11 @@ export const FranchiseOpportunity: React.FC = () => {
       <div className="absolute inset-0 z-0 opacity-15 mix-blend-luminosity">
         <img
           src={BRAND_INFO.images.facility}
-          alt="Cloud kitchen setup"
+          alt=""
           className="w-full h-full object-cover object-center"
           referrerPolicy="no-referrer"
+          loading="lazy"
+          decoding="async"
         />
       </div>
 

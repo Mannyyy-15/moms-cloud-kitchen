@@ -27,7 +27,6 @@ import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { LegalModal, LegalTab } from './components/LegalModal';
 import { FranchiseType } from './types';
 import { initMetaPixel } from './utils/metaPixel';
-import { captureAndStoreUtm } from './utils/utm';
 
 export default function App() {
   const [selectedFranchiseType, setSelectedFranchiseType] =
@@ -36,9 +35,6 @@ export default function App() {
   const [legalTab, setLegalTab] = useState<LegalTab>('franchise-terms');
 
   useEffect(() => {
-    // 1. Capture UTM attribution parameters from URL & persist to sessionStorage
-    captureAndStoreUtm();
-    // 2. Initialize Meta Pixel tracking safely if configured
     initMetaPixel();
   }, []);
 
@@ -58,7 +54,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FFF9F2] text-[#28231E] selection:bg-[#E87924] selection:text-white">
       {/* A. Header: Sticky Navigation Bar */}
-      <Navbar onSelectFranchise={handleSelectModel} />
+      <Navbar />
 
       <main className="flex-grow">
         {/* B. Hero Section: Meta Ads Traffic Optimized */}

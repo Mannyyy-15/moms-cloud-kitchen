@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { MessageSquare, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { BRAND_INFO } from '../data/brandData';
 
 export const FloatingWhatsApp: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2 select-none">
@@ -12,18 +13,19 @@ export const FloatingWhatsApp: React.FC = () => {
       <AnimatePresence>
         {showTooltip && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 10 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.9, y: 10 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+            exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 10 }}
             className="relative bg-white text-[#28231E] px-4 py-2.5 rounded-2xl shadow-xl border border-[#E87924]/20 max-w-[240px] text-xs leading-snug flex items-start gap-2.5"
           >
             <div>
-              <p className="font-extrabold text-[#E87924]">Franchise Queries?</p>
-              <p className="text-[11px] text-[#28231E]/70 mt-0.5">
+              <p className="font-extrabold text-[#C2540A]">Franchise Queries?</p>
+              <p className="text-[11px] text-[#28231E]/80 mt-0.5">
                 Chat with Founder Aditya directly on WhatsApp ({BRAND_INFO.phoneDisplay}).
               </p>
             </div>
             <button
+              type="button"
               onClick={() => setShowTooltip(false)}
               className="p-1 text-[#28231E]/40 hover:text-[#28231E] rounded transition-colors cursor-pointer"
               aria-label="Dismiss message"
@@ -40,13 +42,17 @@ export const FloatingWhatsApp: React.FC = () => {
         href={BRAND_INFO.whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
         className="group relative flex items-center gap-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-xs sm:text-sm px-4 py-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all duration-300 border-2 border-white cursor-pointer"
-        aria-label="Chat on WhatsApp with Aditya Kuttan"
+        aria-label={`WhatsApp Founder — chat with Aditya Kuttan (${BRAND_INFO.phoneDisplay})`}
       >
         <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+          <span
+            className={`absolute inline-flex h-full w-full rounded-full bg-white opacity-75${
+              shouldReduceMotion ? '' : ' animate-ping'
+            }`}
+          />
           <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
         </span>
         <MessageSquare className="w-5 h-5 fill-current" />

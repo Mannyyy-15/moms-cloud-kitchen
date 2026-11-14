@@ -19,7 +19,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
   };
 
   return (
-    <footer id="contact" className="bg-[#1C120C] text-[#FFF9F2] border-t-2 border-[#E87924]/30 pt-16 pb-12 select-none">
+    <footer id="contact" className="bg-[#1C120C] text-[#FFF9F2] border-t-2 border-[#E87924]/30 pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
@@ -37,7 +37,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
             </div>
 
             <div className="text-xs text-[#FFF9F2]/60 pt-1">
-              Official Website: <strong className="text-white">www.momscloudkitchen.com</strong>
+              Official Website: <strong className="text-white">{BRAND_INFO.domain}</strong>
             </div>
 
             {/* Social Link */}
@@ -56,9 +56,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
 
           {/* Col 2: Navigation Links */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858]">
+            <h3 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858]">
               Navigation
-            </h4>
+            </h3>
             <ul className="space-y-2 text-sm text-[#FFF9F2]/80">
               <li>
                 <button
@@ -114,10 +114,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
 
           {/* Col 3: Legal & Governance */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858] flex items-center gap-2">
+            <h3 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858] flex items-center gap-2">
               <Scale className="w-4 h-4 text-[#E87924]" />
               <span>Legal &amp; Policies</span>
-            </h4>
+            </h3>
             <p className="text-xs text-[#FFF9F2]/70 leading-relaxed">
               Standardized franchise governance, compliance protocols, and applicant terms:
             </p>
@@ -157,9 +157,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
 
           {/* Col 4: Direct Official Contacts */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858]">
+            <h3 className="font-display font-black text-sm uppercase tracking-wider text-[#FFA858]">
               Official Contact
-            </h4>
+            </h3>
             <div className="space-y-3 text-sm text-[#FFF9F2]/85">
               <a
                 href={BRAND_INFO.whatsappUrl}

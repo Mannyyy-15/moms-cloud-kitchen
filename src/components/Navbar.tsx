@@ -1,24 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Phone, MessageSquare, Instagram, ShieldCheck, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, ArrowRight, Phone, MessageSquare, Instagram } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { BRAND_INFO } from '../data/brandData';
-import { FranchiseType } from '../types';
 
-interface NavbarProps {
-  onSelectFranchise?: (type: FranchiseType) => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+export const Navbar: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(
+    () => typeof window !== 'undefined' && window.scrollY > 25
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const scrollTimeoutRef = useRef<number | null>(null);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mql.matches) {
+      setMobileMenuOpen(false);
+    }
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      if (wasOpenRef.current) {
+        wasOpenRef.current = false;
+        toggleButtonRef.current?.focus();
+      }
+      return;
+    }
+
+    wasOpenRef.current = true;
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   // Prevent background scrolling when mobile menu is open
@@ -47,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
     setMobileMenuOpen(false);
     document.body.style.overflow = 'unset';
 
-    setTimeout(() => {
+    scrollTimeoutRef.current = window.setTimeout(() => {
       // Support aliases (#food or #menu)
       const targetId = href === '#food' ? '#menu' : href;
       const element = document.querySelector(targetId);
@@ -96,8 +143,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               <span className="w-3.5 h-3.5 border-2 border-emerald-500 p-[2px] flex items-center justify-center rounded-xs shrink-0">
                 <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
               </span>
-              <span className="hidden xs:inline">100% Pure Veg</span>
-              <span className="xs:hidden">Pure Veg</span>
+              <span>Pure Veg</span>
             </div>
           </div>
 
@@ -147,6 +193,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
                   : 'border-white/20 text-white hover:bg-white/10'
               }`}
               title={`Call Franchise Desk: ${BRAND_INFO.phone}`}
+              aria-label={`Call Franchise Desk: ${BRAND_INFO.phone}`}
             >
               <Phone className="w-3.5 h-3.5 text-[#E87924]" />
               <span className="hidden xl:inline">{BRAND_INFO.phone}</span>
@@ -191,6 +238,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             {/* Accessible Hamburger Toggle */}
             <button
               type="button"
+              ref={toggleButtonRef}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`p-2 rounded-xl transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ${
                 isScrolled
@@ -199,6 +247,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
               }`}
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation-drawer"
             >
               {mobileMenuOpen ? <X className="w-5 h-5 text-[#E87924]" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -213,6 +262,10 @@ export const Navbar: React.FC<NavbarProps> = () => {
           onClick={() => setMobileMenuOpen(false)}
         >
           <div
+            id="mobile-navigation-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
             className="fixed top-3 right-3 left-3 max-w-lg mx-auto bg-[#FFF9F2] border border-[#E87924]/25 rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -220,6 +273,8 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <div className="flex items-center justify-between pb-3 border-b border-[#E87924]/15">
               <BrandLogo variant="dark" size="sm" />
               <button
+                ref={closeButtonRef}
+                type="button"
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-2 rounded-xl bg-[#FFF3E3] text-[#28231E] hover:text-[#E87924] transition-colors"
                 aria-label="Close menu"

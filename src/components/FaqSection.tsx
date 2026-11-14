@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, MessageSquare } from 'lucide-react';
+import { ChevronDown, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ScrollReveal } from './ScrollReveal';
 import { BRAND_INFO } from '../data/brandData';
@@ -65,10 +65,10 @@ export const FaqSection: React.FC = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 mb-3 justify-center">
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#E87924]">
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#C2540A]">
               Clear &amp; Transparent Answers
             </span>
-            <span className="h-px w-8 bg-[#E87924]" />
+            <span className="h-px w-8 bg-[#C2540A]" />
           </div>
 
           <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#28231E] tracking-tight leading-[1.12] mb-4">
@@ -92,29 +92,34 @@ export const FaqSection: React.FC = () => {
               >
                 <button
                   type="button"
+                  id={`faq-question-${index}`}
                   onClick={() => toggleFaq(index)}
                   className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:bg-[#FFF3E3]/40"
                   aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
                 >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-8 h-8 rounded-lg bg-[#FFF3E3] text-[#E87924] flex items-center justify-center shrink-0 font-bold text-xs">
+                  <span className="flex items-center gap-3.5">
+                    <span className="w-8 h-8 rounded-lg bg-[#FFF3E3] text-[#C2540A] flex items-center justify-center shrink-0 font-bold text-xs">
                       Q{index + 1}
-                    </div>
+                    </span>
                     <span className="font-display font-bold text-base sm:text-lg text-[#28231E] leading-snug">
                       {item.question}
                     </span>
-                  </div>
+                  </span>
 
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                    isOpen ? 'rotate-180 bg-[#E87924] text-white' : 'bg-[#FFF3E3] text-[#E87924]'
+                  <span className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                    isOpen ? 'rotate-180 bg-[#C2540A] text-white' : 'bg-[#FFF3E3] text-[#C2540A]'
                   }`}>
                     <ChevronDown className="w-4 h-4" />
-                  </div>
+                  </span>
                 </button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      id={`faq-answer-${index}`}
+                      role="region"
+                      aria-labelledby={`faq-question-${index}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -123,7 +128,7 @@ export const FaqSection: React.FC = () => {
                     >
                       <div className="px-5 sm:px-6 pb-6 pt-1 text-sm text-[#28231E]/80 leading-relaxed border-t border-[#E87924]/10 pl-16">
                         <p>{item.answer}</p>
-                        <span className="inline-block mt-3 text-[10px] font-black uppercase tracking-wider text-[#E87924] bg-[#FFF3E3] px-2.5 py-0.5 rounded-full border border-[#E87924]/20">
+                        <span className="inline-block mt-3 text-[10px] font-black uppercase tracking-wider text-[#C2540A] bg-[#FFF3E3] px-2.5 py-0.5 rounded-full border border-[#C2540A]/20">
                           {item.category}
                         </span>
                       </div>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, FileText, ShieldCheck, Scale, CheckCircle2, AlertTriangle, Building2, ExternalLink } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, FileText, ShieldCheck, Scale, AlertTriangle, ExternalLink } from 'lucide-react';
 import { BRAND_INFO } from '../data/brandData';
 
 export type LegalTab = 'franchise-terms' | 'terms-of-use' | 'privacy-policy';
@@ -10,23 +10,124 @@ interface LegalModalProps {
   defaultTab?: LegalTab;
 }
 
+const LEGAL_TAB_ORDER: LegalTab[] = ['franchise-terms', 'terms-of-use', 'privacy-policy'];
+
 export const LegalModal: React.FC<LegalModalProps> = ({
   isOpen,
   onClose,
   defaultTab = 'franchise-terms'
 }) => {
   const [activeTab, setActiveTab] = useState<LegalTab>(defaultTab);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const tabRefs = useRef<Record<LegalTab, HTMLButtonElement | null>>({
+    'franchise-terms': null,
+    'terms-of-use': null,
+    'privacy-policy': null,
+  });
 
-  React.useEffect(() => {
-    setActiveTab(defaultTab);
-  }, [defaultTab]);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) setActiveTab(defaultTab);
+  }, [isOpen, defaultTab]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onCloseRef.current();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+
+      const modal = modalRef.current;
+      if (!modal) return;
+
+      const focusableElements = Array.from(
+        modal.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element.offsetParent !== null);
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey) {
+        if (activeElement === firstElement || !modal.contains(activeElement)) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+      } else if (activeElement === lastElement || !modal.contains(activeElement)) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+      const previousElement = previouslyFocusedRef.current;
+      if (previousElement && typeof previousElement.focus === 'function') {
+        previousElement.focus();
+      }
+    };
+  }, [isOpen]);
+
+  const handleTabKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    tab: LegalTab
+  ) => {
+    let nextIndex: number | null = null;
+    const currentIndex = LEGAL_TAB_ORDER.indexOf(tab);
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % LEGAL_TAB_ORDER.length;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + LEGAL_TAB_ORDER.length) % LEGAL_TAB_ORDER.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = LEGAL_TAB_ORDER.length - 1;
+    }
+
+    if (nextIndex === null) return;
+
+    event.preventDefault();
+    const nextTab = LEGAL_TAB_ORDER[nextIndex];
+    setActiveTab(nextTab);
+    tabRefs.current[nextTab]?.focus();
+  };
 
   if (!isOpen) return null;
 
   return (
     <div
+      ref={modalRef}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="legal-modal-title"
+      tabIndex={-1}
       className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200"
     >
       <div className="relative w-full max-w-4xl bg-[#FFF8EC] border-2 border-[#174B35]/20 text-[#28231E] rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
@@ -38,7 +139,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white leading-none">
+                <span id="legal-modal-title" className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white leading-none">
                   Mom's Cloud Kitchen
                 </span>
                 <span className="text-[10px] bg-[#E87924] text-white px-2 py-0.5 rounded uppercase font-bold tracking-wider">
@@ -46,12 +147,13 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 </span>
               </div>
               <p className="text-xs text-[#FFF8EC]/75 mt-0.5">
-                Compliance, Franchise Policies & Data Privacy · www.momscloudkitchen.com
+                Compliance, Franchise Policies & Data Privacy · {BRAND_INFO.domain}
               </p>
             </div>
           </div>
 
           <button
+            ref={closeButtonRef}
             onClick={onClose}
             className="p-2 text-white/70 hover:text-white rounded-full bg-white/10 hover:bg-white/20 transition-colors cursor-pointer"
             aria-label="Close dialog"
@@ -61,9 +163,18 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         </div>
 
         {/* Tab Switcher */}
-        <div className="bg-[#F6EBDD] border-b border-[#28231E]/10 px-6 sm:px-8 flex items-center gap-2 sm:gap-4 overflow-x-auto shrink-0">
+        <div role="tablist" aria-label="Legal sections" className="bg-[#F6EBDD] border-b border-[#28231E]/10 px-6 sm:px-8 flex items-center gap-2 sm:gap-4 overflow-x-auto shrink-0">
           <button
+            ref={(element) => {
+              tabRefs.current['franchise-terms'] = element;
+            }}
+            id="legal-tab-franchise-terms"
+            role="tab"
+            aria-selected={activeTab === 'franchise-terms'}
+            aria-controls="legal-panel-franchise-terms"
+            tabIndex={activeTab === 'franchise-terms' ? 0 : -1}
             onClick={() => setActiveTab('franchise-terms')}
+            onKeyDown={(event) => handleTabKeyDown(event, 'franchise-terms')}
             className={`py-3.5 px-3 sm:px-4 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
               activeTab === 'franchise-terms'
                 ? 'border-[#E87924] text-[#174B35]'
@@ -75,7 +186,16 @@ export const LegalModal: React.FC<LegalModalProps> = ({
           </button>
 
           <button
+            ref={(element) => {
+              tabRefs.current['terms-of-use'] = element;
+            }}
+            id="legal-tab-terms-of-use"
+            role="tab"
+            aria-selected={activeTab === 'terms-of-use'}
+            aria-controls="legal-panel-terms-of-use"
+            tabIndex={activeTab === 'terms-of-use' ? 0 : -1}
             onClick={() => setActiveTab('terms-of-use')}
+            onKeyDown={(event) => handleTabKeyDown(event, 'terms-of-use')}
             className={`py-3.5 px-3 sm:px-4 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
               activeTab === 'terms-of-use'
                 ? 'border-[#E87924] text-[#174B35]'
@@ -87,7 +207,16 @@ export const LegalModal: React.FC<LegalModalProps> = ({
           </button>
 
           <button
+            ref={(element) => {
+              tabRefs.current['privacy-policy'] = element;
+            }}
+            id="legal-tab-privacy-policy"
+            role="tab"
+            aria-selected={activeTab === 'privacy-policy'}
+            aria-controls="legal-panel-privacy-policy"
+            tabIndex={activeTab === 'privacy-policy' ? 0 : -1}
             onClick={() => setActiveTab('privacy-policy')}
+            onKeyDown={(event) => handleTabKeyDown(event, 'privacy-policy')}
             className={`py-3.5 px-3 sm:px-4 text-xs sm:text-sm font-bold uppercase tracking-wider border-b-2 transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
               activeTab === 'privacy-policy'
                 ? 'border-[#E87924] text-[#174B35]'
@@ -100,7 +229,13 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         </div>
 
         {/* Modal Scrollable Content */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-sm text-[#28231E]/85 leading-relaxed">
+        <div
+          id={`legal-panel-${activeTab}`}
+          role="tabpanel"
+          aria-labelledby={`legal-tab-${activeTab}`}
+          tabIndex={0}
+          className="p-6 sm:p-8 overflow-y-auto space-y-6 text-sm text-[#28231E]/85 leading-relaxed"
+        >
           {/* TAB 1: FRANCHISE AGREEMENT POLICIES (12 Clauses adapted from official standard) */}
           {activeTab === 'franchise-terms' && (
             <div className="space-y-6">
@@ -123,7 +258,8 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 </div>
                 <div className="pl-10 space-y-2 text-xs sm:text-sm">
                   <p>
-                    The designated one-time Franchise Fee (Cloud Kitchen Pro: ₹3,99,000 / City Master Franchise: ₹12,50,000)
+                    The designated one-time Franchise Fee (Cloud Kitchen: ₹4,00,000 / Cloud Kitchen + Dine-In: ₹6,00,000 /
+                    Master Franchise (Cloud Kitchen): ₹20,00,000 / Master Franchise (Cloud + Dine-In): ₹25,00,000)
                     is payable upon executing the formal agreement or issuing commercial territory confirmation.
                   </p>
                   <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-900 text-xs font-semibold">
@@ -373,10 +509,10 @@ export const LegalModal: React.FC<LegalModalProps> = ({
             <div className="space-y-6">
               <div className="border-b border-[#28231E]/10 pb-4">
                 <h3 className="font-display font-bold text-xl text-[#174B35]">
-                  Terms of Website Use (www.momscloudkitchen.com)
+                  Terms of Website Use ({BRAND_INFO.domain})
                 </h3>
                 <p className="text-xs text-[#28231E]/60 mt-1">
-                  Last Updated: 2026 · Official Terms for Online Visitors & Franchise Applicants
+                  Last Updated: November 2026 · Official Terms for Online Visitors & Franchise Applicants
                 </p>
               </div>
 
@@ -384,7 +520,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 <div className="p-4 bg-white rounded-xl border border-[#28231E]/10">
                   <h4 className="font-bold text-[#174B35] mb-1">1. Acceptance of Terms</h4>
                   <p>
-                    By browsing www.momscloudkitchen.com, submitting franchise inquiry forms, or contacting our team via WhatsApp,
+                    By browsing {BRAND_INFO.domain}, submitting franchise inquiry forms, or contacting our team via WhatsApp,
                     you accept and agree to be bound by these Terms of Use and our Applicant Privacy Policy.
                   </p>
                 </div>
@@ -392,7 +528,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                 <div className="p-4 bg-white rounded-xl border border-[#28231E]/10">
                   <h4 className="font-bold text-[#174B35] mb-1">2. Illustrative Financial Projections & No Guarantee</h4>
                   <p>
-                    All unit economics models, daily order simulations (70–120 orders/day), and payback estimates (4–6 months)
+                    All unit economics models, daily order simulations (70–120 orders/day), and payback estimates (6–8 months)
                     displayed on this website are for simulation and illustrative planning only. Actual outlet performance depends
                     on location footfall, aggregator algorithms, local consumer demand, and operational diligence. The franchisor
                     makes no representation of guaranteed returns.
@@ -436,7 +572,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   Franchise Applicant Privacy Policy
                 </h3>
                 <p className="text-xs text-[#28231E]/60 mt-1">
-                  How Mom's Cloud Kitchen collects, protects, and handles applicant data submitted via www.momscloudkitchen.com
+                  How Mom's Cloud Kitchen collects, protects, and handles applicant data submitted via {BRAND_INFO.domain}
                 </p>
               </div>
 
@@ -475,7 +611,26 @@ export const LegalModal: React.FC<LegalModalProps> = ({
                   <h4 className="font-bold text-[#174B35] mb-1">4. Data Security & Direct WhatsApp Transparency</h4>
                   <p>
                     All form transmissions are protected via SSL/TLS encryption. Furthermore, our lead generation workflow enables
-                    direct transparent communication over WhatsApp (+91 98924 47728) where you maintain complete control over your conversation history.
+                    direct transparent communication over WhatsApp ({BRAND_INFO.phoneDisplay}) where you maintain complete control over your conversation history.
+                  </p>
+                </div>
+
+                <div className="p-4 bg-white rounded-xl border border-[#28231E]/10">
+                  <h4 className="font-bold text-[#174B35] mb-1">5. Analytics, Form Processing & Retention</h4>
+                  <p className="mb-2">
+                    We use the Meta Pixel to measure advertising performance and FormSubmit to deliver franchise inquiry
+                    submissions to our franchise desk. UTM campaign parameters and the Meta click identifier (fbclid) may be
+                    stored in your browser&apos;s sessionStorage, and a one-way lead-dedupe value may be retained to prevent
+                    duplicate inquiries. These tools are used only for analytics and inquiry routing, not for selling personal data.
+                  </p>
+                  <p className="mb-2">
+                    By submitting an inquiry, you consent to this processing. You may withdraw consent or request access,
+                    correction, or deletion of your information at any time.
+                  </p>
+                  <p>
+                    Inquiry records are retained only as long as needed to evaluate your application and meet statutory
+                    compliance obligations, after which they are securely deleted. For privacy requests, contact us at{" "}
+                    {BRAND_INFO.email} or {BRAND_INFO.phoneDisplay}.
                   </p>
                 </div>
               </div>
@@ -486,11 +641,11 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         {/* Modal Footer */}
         <div className="bg-[#F6EBDD] border-t border-[#28231E]/10 px-6 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <div className="text-xs text-[#28231E]/60 text-center sm:text-left">
-            Headquarters: Vasai & Virar, Maharashtra · Official Hotline: +91 98924 47728
+            Headquarters: Vasai & Virar, Maharashtra · Official Hotline: {BRAND_INFO.phoneDisplay}
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <a
-              href="https://wa.me/919892447728?text=Hi%20Aditya!%20I%20have%20reviewed%20the%20Franchise%20Agreement%20Policies%20on%20www.momscloudkitchen.com%20and%20want%20to%20discuss%20next%20steps."
+              href={BRAND_INFO.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 sm:flex-none px-4 py-2 bg-[#174B35] hover:bg-[#103626] text-white font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-2"

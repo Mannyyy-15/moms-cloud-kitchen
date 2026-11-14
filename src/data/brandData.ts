@@ -28,7 +28,7 @@ export const BRAND_INFO = {
     momCooking: "/images/kitchen_mom_cooking_1793814074228.jpg",
     southIndian: "/images/food_south_indian_thali_1793814074632.jpg",
     breakfast: "/images/dish_masala_dosa.jpg",
-    shravan: "/images/dish_sabudana_khichdi.jpeg",
+    shravan: "/images/dish_sabudana_khichdi_fresh.jpg",
     protein: "/images/dish_ragi_masala_dosa.jpg",
     sweet: "/images/dish_chocolate_dosa.jpg",
     facility: "/images/franchise_cloud_kitchen_1793814093845.jpg",
@@ -158,7 +158,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Thick spongy pancake topped with caramelized country onions, ripe tomatoes and aromatic curry leaves.",
         price: "₹189",
-        image: "/images/dish_uttappam.jpeg",
+        image: "/images/dish_uttappam_fresh.jpg",
         tag: "Comfort"
       },
       {
@@ -194,7 +194,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Flattened rice tossed with roasted peanuts, mustard seeds, turmeric, green chillies, and freshly squeezed lemon.",
         price: "₹149",
-        image: "/images/dish_poha.jpeg",
+        image: "/images/dish_poha_fresh.jpg",
         tag: "Light"
       },
       {
@@ -212,7 +212,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "All Day Breakfast",
         description: "Crispy-shelled steamed dumplings made from fermented batter, tempered with onions, mustard, and green chillies.",
         price: "₹189",
-        image: "/images/dish_masala_appe.jpg",
+        image: "/images/dish_masala_appe_golden.jpg",
         tag: "Popular"
       }
     ]
@@ -246,7 +246,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Wholesome gluten-conscious ragi pancake garnished generously with chopped onions, sweet carrots and coriander.",
         price: "₹189",
-        image: "/images/dish_ragi_uttappam.jpeg",
+        image: "/images/dish_ragi_uttappam_fresh.jpg",
         tag: "Slow Carb"
       },
       {
@@ -264,7 +264,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Hearty ragi cakes filled with a lightly spiced vegetable core, served with antioxidant-rich tomato and coconut chutneys.",
         price: "₹189",
-        image: "/images/dish_ragi_stuffed_idli_4_pcs.jpg",
+        image: "/images/dish_ragi_stuffed_idli_4_pcs_fresh.jpg",
         tag: "Wholesome"
       },
       {
@@ -273,7 +273,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "High Protein Ragi",
         description: "Twelve golden-brown bite-sized ragi dumplings, crunchy outside and tender within, tossed in delicate Indian spices.",
         price: "₹179",
-        image: "/images/dish_ragi_masala_appa_12_pcs.jpeg",
+        image: "/images/dish_ragi_masala_appa_12_pcs_fresh.jpg",
         tag: "Snack Favorite"
       }
     ]
@@ -289,7 +289,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Shravan & Upvas",
         description: "Non-sticky translucent tapioca pearls tossed with coarse roasted crushed peanuts, cumin, green chillies and rock salt.",
         price: "₹189",
-        image: "/images/dish_sabudana_khichdi.jpeg",
+        image: "/images/dish_sabudana_khichdi_fresh.jpg",
         tag: "100% Satvik"
       },
       {
@@ -298,7 +298,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Shravan & Upvas",
         description: "Crisp hand-cut potato batons fried in clean vegetable oil and tossed in sendha rock salt.",
         price: "₹149",
-        image: "/images/dish_french_fries.jpeg",
+        image: "/images/dish_french_fries_fresh.jpg",
         tag: "Kid's Pick"
       }
     ]
@@ -366,7 +366,7 @@ export const MENU_CATEGORIES: MenuCategory[] = [
         category: "Sweet Tooth",
         description: "Twelve bite-sized fluffy buttermilk pancakes crowned with warm chocolate sauce and powdered sugar.",
         price: "₹229",
-        image: "/images/dish_mini_chocolate_pancakes_12_pcs.jpg",
+        image: "/images/dish_mini_chocolate_pancakes_12_pcs_fresh.jpg",
         tag: "Bestseller Dessert"
       }
     ]

@@ -37,10 +37,10 @@ export const FoodShowcase: React.FC = () => {
         <ScrollReveal direction="up" className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-14">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 mb-3">
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#E87924]">
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#C2540A]">
                 Our Food Identity · 100% Pure Veg
               </span>
-              <span className="h-px w-8 bg-[#E87924]" />
+              <span className="h-px w-8 bg-[#C2540A]" />
             </div>
 
             <h2 className="font-display font-black text-3xl sm:text-5xl text-[#28231E] tracking-tight leading-[1.12]">
@@ -57,7 +57,7 @@ export const FoodShowcase: React.FC = () => {
           <div className="shrink-0 flex items-center gap-4">
             <button
               onClick={() => scrollTo('#franchise-enquiry')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#E87924] hover:text-[#D16719] bg-white px-5 py-3 rounded-xl border border-[#E87924]/30 shadow-xs transition-all hover:shadow cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#C2540A] hover:text-[#943800] bg-white px-5 py-3 rounded-xl border border-[#C2540A]/30 shadow-xs transition-all hover:shadow cursor-pointer"
             >
               <span>Explore Franchise Menu Rights</span>
               <ArrowRight className="w-4 h-4" />
@@ -139,8 +139,11 @@ export const FoodShowcase: React.FC = () => {
                       alt={item.name}
                       className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => {
-                        const target = e.target as HTMLImageElement;
+                        const target = e.currentTarget;
+                        if (target.dataset.fallbackApplied) return;
+                        target.dataset.fallbackApplied = 'true';
                         target.src = '/images/dish_plain_dosa.jpg';
                       }}
                     />
@@ -154,24 +157,24 @@ export const FoodShowcase: React.FC = () => {
                         <div className="w-2.5 h-2.5 rounded-full bg-green-600" />
                       </div>
                       {item.tag && (
-                        <span className="bg-[#E87924]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+                        <span className="bg-[#C2540A] backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
                           {item.tag}
                         </span>
                       )}
                     </div>
 
                     {/* Price Tag Pill */}
-                    <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-[#28231E] font-display font-black text-base px-3.5 py-1 rounded-xl shadow-md tabular-nums border border-[#E87924]/30">
+                    <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-xs text-[#28231E] font-display font-black text-base px-3.5 py-1 rounded-xl shadow-md tabular-nums border border-[#C2540A]/30">
                       {item.price}
                     </div>
                   </div>
 
                   {/* Content Block */}
                   <div className="p-5 sm:p-6">
-                    <h4 className="font-display font-bold text-lg sm:text-xl text-[#28231E] group-hover:text-[#E87924] transition-colors leading-tight mb-2">
+                    <h4 className="font-display font-black text-lg sm:text-xl text-[#28231E] group-hover:text-[#9E3C00] transition-colors leading-tight mb-2">
                       {item.name}
                     </h4>
-                    <p className="text-xs sm:text-sm text-[#28231E]/75 leading-relaxed line-clamp-3">
+                    <p className="text-xs sm:text-sm text-[#3B342C] leading-relaxed line-clamp-3">
                       {item.description}
                     </p>
                   </div>
@@ -180,17 +183,17 @@ export const FoodShowcase: React.FC = () => {
                 {/* Card Action & Highlights */}
                 <div className="px-5 sm:px-6 py-3.5 bg-[#FFF9F2] border-t border-[#E87924]/15 flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1.5 font-medium text-[#28231E]">
-                    <Sparkles className="w-3.5 h-3.5 text-[#E87924]" />
+                    <Sparkles className="w-3.5 h-3.5 text-[#C2540A]" />
                     Home-Style Recipe
                   </span>
 
                   <a
-                    href={`https://wa.me/918484030988?text=${encodeURIComponent(
+                    href={`https://wa.me/${BRAND_INFO.phoneClean.replace('+', '')}?text=${encodeURIComponent(
                       `Hello Aditya, I want to enquire about "${item.name}" from Mom's Cloud Kitchen.`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-bold text-[#E87924] hover:text-[#D16719] transition-colors"
+                    className="inline-flex items-center gap-1 font-bold text-[#C2540A] hover:text-[#943800] transition-colors"
                   >
                     <span>WhatsApp</span>
                     <MessageSquare className="w-3.5 h-3.5" />
@@ -206,7 +209,7 @@ export const FoodShowcase: React.FC = () => {
           <div className="sm:hidden mt-6 text-center">
             <button
               onClick={() => setShowAllMobile(!showAllMobile)}
-              className="inline-flex items-center gap-2 bg-white border border-[#E87924]/30 text-[#E87924] font-black text-xs uppercase tracking-wider px-6 py-2.5 rounded-full shadow-xs active:scale-95 transition-all"
+              className="inline-flex items-center gap-2 bg-white border border-[#C2540A]/30 text-[#C2540A] font-black text-xs uppercase tracking-wider px-6 py-2.5 rounded-full shadow-xs active:scale-95 transition-all"
             >
               <span>{showAllMobile ? 'Show Less' : `View All ${activeCategory.items.length} Dishes`}</span>
               <ArrowRight className={`w-3.5 h-3.5 transition-transform ${showAllMobile ? '-rotate-90' : 'rotate-90'}`} />
@@ -217,7 +220,7 @@ export const FoodShowcase: React.FC = () => {
         {/* Editorial Note for Franchisees */}
         <div className="mt-12 text-center p-6 bg-white rounded-2xl border border-[#E87924]/20 max-w-2xl mx-auto shadow-xs">
           <p className="text-xs sm:text-sm text-[#28231E]/80 leading-relaxed">
-            <strong className="text-[#E87924] font-bold">Standardized SOPs:</strong> All 23 signature dishes use pre-measured dry spice mixes and streamlined kitchen prep methods to guarantee zero chef dependency and rapid 8–12 minute order dispatch.
+            <strong className="text-[#C2540A] font-bold">Standardized SOPs:</strong> All 23 signature dishes use pre-measured dry spice mixes and streamlined kitchen prep methods to guarantee zero chef dependency and rapid 8–12 minute order dispatch.
           </p>
         </div>
       </div>

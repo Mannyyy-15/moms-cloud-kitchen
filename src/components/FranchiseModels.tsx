@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Store, Utensils, Building2, Check, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Store, Utensils, Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { FRANCHISE_MODELS, SETUP_COST_BREAKDOWN } from '../data/brandData';
 import { FranchiseType } from '../types';
 import { ScrollReveal, StaggerContainer, StaggerItem, TextReveal } from './ScrollReveal';
@@ -42,6 +42,7 @@ export const FranchiseModels: React.FC<FranchiseModelsProps> = ({ onSelectModel 
           <div className="mt-8 inline-flex p-1.5 rounded-2xl bg-white border-2 border-[#E87924]/20 shadow-xs">
             <button
               onClick={() => setActiveTab('unit')}
+              aria-pressed={activeTab === 'unit'}
               className={`px-5 sm:px-7 py-2.5 rounded-xl font-display font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'unit'
                   ? 'bg-[#E87924] text-white shadow-md'
@@ -52,6 +53,7 @@ export const FranchiseModels: React.FC<FranchiseModelsProps> = ({ onSelectModel 
             </button>
             <button
               onClick={() => setActiveTab('master')}
+              aria-pressed={activeTab === 'master'}
               className={`px-5 sm:px-7 py-2.5 rounded-xl font-display font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === 'master'
                   ? 'bg-[#E87924] text-white shadow-md'
@@ -156,6 +158,8 @@ export const FranchiseModels: React.FC<FranchiseModelsProps> = ({ onSelectModel 
         <div className="max-w-4xl mx-auto text-center">
           <button
             onClick={() => setShowBreakdown(!showBreakdown)}
+            aria-expanded={showBreakdown}
+            aria-controls="setup-cost-breakdown"
             className="inline-flex items-center gap-2 bg-white hover:bg-[#FFF3E3] border-2 border-[#E87924]/30 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm text-[#28231E] transition-all cursor-pointer"
           >
             <span>{showBreakdown ? 'Hide Setup Cost Breakdown' : 'View Estimated Setup Cost Breakdown (₹5L–₹8L)'}</span>
@@ -163,7 +167,7 @@ export const FranchiseModels: React.FC<FranchiseModelsProps> = ({ onSelectModel 
           </button>
 
           {showBreakdown && (
-            <div className="mt-6 text-left bg-white rounded-3xl p-6 sm:p-8 border-2 border-[#E87924]/30 shadow-lg animate-in fade-in duration-300">
+            <div id="setup-cost-breakdown" className="mt-6 text-left bg-white rounded-3xl p-6 sm:p-8 border-2 border-[#E87924]/30 shadow-lg animate-in fade-in duration-300">
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#28231E]/10">
                 <div>
                   <h4 className="font-display font-black text-lg sm:text-xl text-[#28231E]">

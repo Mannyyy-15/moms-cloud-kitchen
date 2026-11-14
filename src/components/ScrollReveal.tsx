@@ -162,27 +162,34 @@ export const TextReveal: React.FC<{
   const words = text.split(' ');
 
   if (shouldReduceMotion) {
-    return <Component className={className}>{text}</Component>;
+    return (
+      <Component aria-label={text} className={`flex flex-wrap items-center ${className}`}>
+        {text}
+      </Component>
+    );
   }
 
   return (
-    <Component className={`flex flex-wrap items-center ${className}`}>
+    <Component aria-label={text} className={`flex flex-wrap items-center ${className}`}>
       {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden mr-[0.25em] last:mr-0 py-0.5">
-          <motion.span
-            initial={{ opacity: 0, y: 35, filter: 'blur(5px)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            viewport={{ once: true, margin: '-20px' }}
-            transition={{
-              duration: 0.65,
-              delay: delay + i * 0.055,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className={`inline-block ${wordClassName}`}
-          >
-            {word}
-          </motion.span>
-        </span>
+        <React.Fragment key={i}>
+          <span className="inline-block overflow-hidden mr-[0.25em] last:mr-0 py-0.5">
+            <motion.span
+              initial={{ opacity: 0, y: 35, filter: 'blur(5px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, margin: '-20px' }}
+              transition={{
+                duration: 0.65,
+                delay: delay + i * 0.055,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className={`inline-block ${wordClassName}`}
+            >
+              {word}
+            </motion.span>
+          </span>
+          {i < words.length - 1 && ' '}
+        </React.Fragment>
       ))}
     </Component>
   );
