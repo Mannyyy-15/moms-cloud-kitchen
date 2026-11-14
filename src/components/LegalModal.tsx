@@ -135,7 +135,18 @@ export const LegalModal: React.FC<LegalModalProps> = ({
         <div className="bg-[#174B35] text-white px-6 sm:px-8 py-5 flex items-center justify-between border-b border-white/10 shrink-0">
           <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-full overflow-hidden bg-white p-0.5 border border-white/40 shrink-0">
-              <img src="/logo.webp" alt="Mom's Cloud Kitchen" className="w-full h-full object-cover" />
+              <img
+                src="/logo.webp"
+                alt="Mom's Cloud Kitchen"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallbackApplied) {
+                    target.dataset.fallbackApplied = 'true';
+                    target.src = '/images/logo.webp';
+                  }
+                }}
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">

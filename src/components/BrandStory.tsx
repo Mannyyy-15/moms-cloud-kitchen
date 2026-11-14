@@ -160,6 +160,13 @@ export const BrandStory: React.FC = () => {
                       className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-102"
                       loading="lazy"
                       decoding="async"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallbackApplied && BRAND_INFO.images.founderBackup) {
+                          target.dataset.fallbackApplied = 'true';
+                          target.src = BRAND_INFO.images.founderBackup;
+                        }
+                      }}
                     />
 
                     <div className="absolute bottom-3 left-3 right-3 bg-black/70 backdrop-blur-md text-white p-3.5 rounded-xl border border-white/20">

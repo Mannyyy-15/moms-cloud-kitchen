@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { QuickNav } from './components/QuickNav';
@@ -24,9 +24,13 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { StickyMobileBar } from './components/StickyMobileBar';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
-import { LegalModal, LegalTab } from './components/LegalModal';
+import type { LegalTab } from './components/LegalModal';
 import { FranchiseType } from './types';
 import { initMetaPixel } from './utils/metaPixel';
+
+const LegalModal = lazy(() =>
+  import('./components/LegalModal').then((m) => ({ default: m.LegalModal }))
+);
 
 export default function App() {
   const [selectedFranchiseType, setSelectedFranchiseType] =
@@ -116,11 +120,15 @@ export default function App() {
       <FloatingWhatsApp />
 
       {/* Comprehensive Legal Modal (12 Mandatory Franchise Clauses) */}
-      <LegalModal
-        isOpen={isLegalOpen}
-        onClose={() => setIsLegalOpen(false)}
-        defaultTab={legalTab}
-      />
+      {isLegalOpen && (
+        <Suspense fallback={null}>
+          <LegalModal
+            isOpen={isLegalOpen}
+            onClose={() => setIsLegalOpen(false)}
+            defaultTab={legalTab}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

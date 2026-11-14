@@ -10,7 +10,6 @@ Options -Indexes
 <IfModule mod_mime.c>
   # JavaScript Modules & Scripts
   AddType application/javascript js mjs
-  AddType text/javascript js mjs
 
   # Stylesheets
   AddType text/css css
@@ -83,9 +82,9 @@ Options -Indexes
   ExpiresByType text/javascript "access plus 1 year"
 
   # Images & Fonts
-  ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 hour"
+  ExpiresByType image/jpeg "access plus 1 hour"
+  ExpiresByType image/png "access plus 1 hour"
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
@@ -100,7 +99,17 @@ Options -Indexes
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 
-  # Prevent aggressive caching of index.html
+  # Cache-Control for Vite hashed asset bundles
+  <FilesMatch "\.(css|js|mjs)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Cache policy for static images: revalidate frequently so new photos load across all devices
+  <FilesMatch "\.(jpe?g|png|webp|gif|svg)$">
+    Header set Cache-Control "public, max-age=3600, stale-while-revalidate=86400"
+  </FilesMatch>
+
+  # Prevent caching of index.html so code updates and script references apply immediately
   <FilesMatch "\.(html|htm)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
